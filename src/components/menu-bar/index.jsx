@@ -5,7 +5,7 @@ const MenuBar = () => {
 
   return (
     <div 
-      className='flex justify-between items-center font-bold p-4 sm:px-10 text-gray-900 bg-gray-200 shadow-md'>
+      className='flex justify-between items-center font-bold p-4 sm:px-10 text-gray-900 bg-gray-50 shadow-md'>
       <div className='flex justify-center items-center gap-3 sm:gap-6'>
         <NavLink 
           to={'home'}
@@ -15,6 +15,10 @@ const MenuBar = () => {
           to={'explore-courses'}
           className={({ isActive }) => isActive ? "text-blue-600 bg-gray-100 p-1 px-3 rounded-2xl" : "text-gray-900 font-medium bg-gray-100 p-1 px-3 rounded-2xl"}
         >Explore Courses</NavLink>
+        <NavLink 
+          to={'create-new-course'}
+          className={({ isActive }) => isActive ? "text-blue-600 bg-gray-100 p-1 px-3 rounded-2xl" : "text-gray-900 font-medium bg-gray-100 p-1 px-3 rounded-2xl"}
+        >Create New Course</NavLink>
       </div>
       <div className='flex justify-center items-center gap-3 sm:gap-6'>
         <NavLink 
