@@ -12,7 +12,7 @@ const CreateNewCourse = () => {
     <div className="flex flex-col justify-start items-start h-screen bg-gray-100 gap-4">
       <div className="flex justify-between items-center bg-gray-100 p-4 sm:p-6 w-full shadow-lg">
         <div className="flex justify-center items-center font-bold">
-          <span>Create a new course</span>
+          <span>Course Creation</span>
         </div>
         <div className="flex gap-4">
           <button 

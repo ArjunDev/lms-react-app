@@ -12,19 +12,19 @@ const Home = () => {
         </div>
       </div>
       <div 
-        className='flex flex-col justify-center items-center gap-4 fixed bottom-10 p-1'>
-        <div className='flex items-center justify-start'>
+        className='flex flex-col justify-center items-center gap-4 p-1 ml-4 w-full'>
+        <div className='flex items-start justify-center'>
           <span className='flex font-bold text-left text-lg'>Course Categories</span>
         </div>
         <div className='flex flex-1 justify-between items-center gap-4'>
           <button 
-            className='flex flex-1 bg-amber-50 rounded text-black text-sm p-1 px-4 cursor-pointer'>Web Development</button>
+            className='bg-gray-200 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Web Development</button>
           <button 
-            className='bg-amber-50 rounded text-black text-sm p-1 px-4 cursor-pointer'>Backend Development</button>
+            className='bg-gray-200 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Backend Development</button>
           <button 
-            className='bg-amber-50 rounded text-black text-sm p-1 px-4 cursor-pointer'>Machine Learning</button>
+            className='bg-gray-200 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Machine Learning</button>
           <button 
-            className='bg-amber-50 rounded text-black text-sm p-1 px-4 cursor-pointer'>Cyber Security</button>
+            className='bg-gray-200 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Cyber Security</button>
         </div>
       </div>
     </div>
