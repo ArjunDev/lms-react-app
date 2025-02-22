@@ -1,9 +1,54 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
 
+  //local form data
+  const [formData, setFormData] = useState({
+    email: "", 
+    password: ""
+  });
+  const [isDisabled, setIsDisabled ] = useState(true);
   const navigate = useNavigate(); 
+  const formDataFromStore = useSelector(state => state.userFormData)
+
+   // Update isDisabled based on form data
+   useEffect(() => {
+    const { email, password } = formData;
+    setIsDisabled(!(email && password)); // Disable if any field is empty
+  }, [formData]);
+  
+  const handleChange = (event) =>{
+    const { name, value } = event.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value //dynamically updating value bassed on name, require 'name' attribute in html tag
+    }));
+  }
+
+  // Handle form submission
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    //data from global store
+    console.log("Form Data from store:", formDataFromStore);
+    console.log("Form Data from local:", formData);
+
+    const storeEmail = formDataFromStore.email;
+    const storePassword = formDataFromStore.password;
+
+    const {email, password} = formData;
+
+    if(storeEmail === email && storePassword === password){
+      console.log("log in success");
+      navigate('/home')
+    }else{
+      console.log("log in failed");
+      alert('Authentication failed! Please enter a correct Email & Password')
+    }
+    // Clear local form data
+    setFormData({email: '',password: ''})
+  };
 
   const gotoSignUpPage = (event) => {
     event.preventDefault();
@@ -15,30 +60,45 @@ const SignIn = () => {
       <div 
         className='flex flex-col justify-center items-center flex-1 bg-gray-900'>
         <form 
-          className='flex flex-col justify-center items-center bg-gray-300 p-4 rounded gap-4 h-max'>
+          onSubmit={handleSubmit}
+          className='flex flex-col justify-center items-center bg-gray-300 p-4 rounded-2xl gap-4 h-max'>
           <div className='flex justify-center items-center font-bold mb-4 text-2xl'>
             <span>Sign In</span>
           </div>
           <div>
-            <label htmlFor="email">Email: </label>
-            <input 
-              className='bg-gray-100 rounded p-1'
-              type="email"
-              placeholder='Enter an email'
-            />
+            <label>Email: 
+              <input 
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                className='bg-gray-100 rounded p-1 ml-2'
+                type="email"
+                placeholder='Enter an email'
+              />
+            </label>
           </div>
           <div>
-            <label htmlFor="password">Password: </label>
-            <input 
-              className='bg-gray-100 rounded p-1'
-              type="password"
-              placeholder='Enter a password' />
+            <label>Password: 
+              <input 
+                name='password'
+                value={formData.password}
+                onChange={handleChange}
+                className='bg-gray-100 rounded p-1 ml-2'
+                type="password"
+                placeholder='Enter a password' 
+              />
+            </label>
           </div>
-          <div 
-            className='w-full bg-gray-800 flex justify-center items-center p-2 rounded-2xl font-bold text-white cursor-pointer hover:bg-gray-600 transition-all'>
-            <button>Submit</button>
-          </div>
-          <div className='flex justify-center items-center mt-3'>
+          <button 
+            className={`w-full flex justify-center items-center p-2 rounded-2xl font-bold text-white transition-all ${
+            isDisabled
+              ? 'bg-gray-900 cursor-not-allowed opacity-50' // Disabled state: Lower opacity & no pointer
+              : 'bg-gray-900 cursor-pointer' // Normal state
+            }`}
+            type='submit'
+            disabled={isDisabled}
+          >Submit</button>
+          <div className='flex justify-center items-center mt-2 mb-2'>
             <span>Don't have an account? </span>
             <button 
               onClick={gotoSignUpPage}
@@ -50,4 +110,4 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+export default SignIn;
