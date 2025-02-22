@@ -1,18 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 const Home = () => {
 
+  const images = [
+    "https://imageplaceholder.net/600x400", // Replace with your images
+    "https://imageplaceholder.net/600x400",
+    "https://imageplaceholder.net/600x400",
+    "https://imageplaceholder.net/600x400",
+    "https://imageplaceholder.net/600x400",
+  ];
+
   
+    const [currentIndex, setCurrentIndex] = useState(0);
+  
+    const nextSlide = () => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      );
+    };
+  
+    const prevSlide = () => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      );
+    };
+
   return (
     <div className='flex flex-col justify-center items-center p-4 py-8 gap-6 h-full w-full sm:p-16'>
-      <div className='flex justify-center items-center w-full min-h-90 bg-gray-300 rounded-2xl'>
-        <div className='flex flex-1 justify-center items-center'>
-          <p className='text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis vitae eaque nobis</p>
+      <div 
+        className='flex flex-1 justify-center items-center rounded-2xl overflow-hidden relative max-w-3xl max-h-96'>
+        {/* Images Wrapper */}
+        <div
+          className={`flex transition-transform duration-500 ease-in-out`}
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+          {images.map((image, index) => (
+            <img key={index} src={image} alt={`slide-${index}`} className="w-full rounded-lg flex-shrink-0" />))
+          }
         </div>
-        <div className='flex flex-1 justify-center items-center rounded-2xl overflow-hidden'>
-          <div className='h-90 bg-gray-500 w-full flex
-          justify-center items-center font-bold text-white p-2'>Image</div>
-        </div>
+        {/* Left Button */}
+        <button
+          className="absolute top-1/2 left-2 transform -translate-y-1/2 p-2 rounded-full text-blue-600 cursor-pointer"
+          onClick={prevSlide}
+        ><ArrowCircleLeftIcon fontSize='large'/></button>
+        {/* Right Button */}
+        <button
+          className="absolute top-1/2 right-2 transform -translate-y-1/2 text-blue-600 p-2 rounded-full cursor-pointer"
+          onClick={nextSlide}
+        ><ArrowCircleRightIcon fontSize='large'/></button>
       </div>
       <div 
         className='flex flex-col justify-center items-center gap-4 w-full bg-gray-300 flex-1 rounded-2xl p-4 sm:p-8'>

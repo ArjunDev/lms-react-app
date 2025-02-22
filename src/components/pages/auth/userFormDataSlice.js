@@ -8,12 +8,12 @@ const initialState = {
   isCreator: false,
   isLoggedIn: false,
   myCourses: [
-    {
-      id: '1',  
-      title: 'test data',
-      author: 'test data',
-      image: 'test-image',
-    }
+    // {
+    //   id: '1',  
+    //   title: 'test data',
+    //   author: 'test data',
+    //   image: 'test-image',
+    // }
   ],
 }
 
