@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setLogIn } from '../userFormDataSlice';
 
 const SignIn = () => {
 
@@ -11,13 +12,14 @@ const SignIn = () => {
   });
   const [isDisabled, setIsDisabled ] = useState(true);
   const navigate = useNavigate(); 
-  const formDataFromStore = useSelector(state => state.userFormData)
+  const formDataFromStore = useSelector(state => state.userFormData);
+  const dispatch = useDispatch()
 
    // Update isDisabled based on form data
    useEffect(() => {
-    const { email, password } = formData;
-    setIsDisabled(!(email && password)); // Disable if any field is empty
+    setIsDisabled(!(formData.email && formData.password));
   }, [formData]);
+  
   
   const handleChange = (event) =>{
     const { name, value } = event.target;
@@ -31,8 +33,8 @@ const SignIn = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     //data from global store
-    console.log("Form Data from store:", formDataFromStore);
-    console.log("Form Data from local:", formData);
+    //console.log("Form Data from store:", formDataFromStore);
+    //console.log("Form Data from local:", formData);
 
     const storeEmail = formDataFromStore.email;
     const storePassword = formDataFromStore.password;
@@ -40,14 +42,15 @@ const SignIn = () => {
     const {email, password} = formData;
 
     if(storeEmail === email && storePassword === password){
-      console.log("log in success");
-      navigate('/home')
+      //console.log("log in success");
+      dispatch(setLogIn());
+      navigate('/home');
+      setFormData({email: '',password: ''})// Clear local form data
     }else{
-      console.log("log in failed");
+      //console.log("log in failed");
       alert('Authentication failed! Please enter a correct Email & Password')
     }
-    // Clear local form data
-    setFormData({email: '',password: ''})
+    //setFormData({email: '',password: ''})// Clear local form data
   };
 
   const gotoSignUpPage = (event) => {
@@ -58,7 +61,7 @@ const SignIn = () => {
   return (
     <div className='flex flex-col justify-center items-center min-h-[87vh] bg-gray-900'>
       <div 
-        className='flex flex-col justify-center items-center flex-1 bg-gray-900'>
+        className='flex flex-col justify-center items-center flex-1 bg-gray-900 p-2'>
         <form 
           onSubmit={handleSubmit}
           className='flex flex-col justify-center items-center bg-gray-300 p-4 rounded-2xl gap-4 h-max'>

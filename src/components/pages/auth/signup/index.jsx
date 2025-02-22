@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setUserFormData } from './userFormDataSlice';
+import { setLogIn, setUserFormData } from '../userFormDataSlice';
 
 const SignUp = () => {
 
@@ -38,6 +38,7 @@ const SignUp = () => {
 
     //dispatching the data to global store
     dispatch(setUserFormData(formData));
+    dispatch(setLogIn());
 
     // Clear form
     setFormData({
@@ -54,14 +55,13 @@ const SignUp = () => {
     navigate('/auth/signin'); // Navigate to SignIn page
   }
 
-  //Global state value
-  //console.log("Form Data Submitted:", displayUserFormData)
+  //console.log("Global Form Data:", displayUserFormData)
 
   return (
     <div 
       className='flex flex-col justify-center items-center min-h-[87vh] bg-gray-900'>
       <div 
-      className='flex flex-col justify-center items-center flex-1 bg-gray-900'>
+      className='flex flex-col justify-center items-center flex-1 bg-gray-900 p-2'>
       <form 
         onSubmit={handleSubmit}
         className='flex flex-col justify-center items-center bg-gray-300 p-4 py-6 rounded-2xl gap-4 h-max'>

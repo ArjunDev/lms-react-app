@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userFormDataSlice from "../pages/auth/signup/userFormDataSlice";
+import userFormDataSlice from "../pages/auth/userFormDataSlice";
 
 const store = configureStore({
 

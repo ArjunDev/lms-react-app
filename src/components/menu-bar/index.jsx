@@ -12,7 +12,7 @@ const MenuBar = () => {
   const creator = formDataFromStore.isCreator;
   const student = formDataFromStore.isStudent;
   
-  console.log(formDataFromStore)
+  //console.log(formDataFromStore)
 
   // Reset profile dropdown upon navigating to auth pages
   useEffect(() => {

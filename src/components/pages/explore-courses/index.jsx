@@ -1,5 +1,5 @@
 import React from 'react'
-import CoursesList from '../../store/courses-list'
+import CoursesList from '../../courses-list'
 
 const ExploreCourses = () => {
 
@@ -11,7 +11,7 @@ const ExploreCourses = () => {
             className='bg-gray-200 hover:bg-gray-100 rounded text-black text-xs p-1 cursor-pointer transition-all'
         >Web Development</button>
       </div>
-      <div className='flex sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 mt-4 overflow-clip'>
+      <div className='flex sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 mt-4'>
       { CoursesList?.map( (item) => 
       <div 
         key={item.id}
