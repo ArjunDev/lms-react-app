@@ -17,7 +17,7 @@ function App() {
 
   const userFormDataFromStore = useSelector(state => state.userFormData);
   useEffect(()=>{
-    console.log("Store Data:", userFormDataFromStore)
+    //console.log("Store Data:", userFormDataFromStore)
   },[userFormDataFromStore])
   
   return (
@@ -30,8 +30,7 @@ function App() {
         <Route path="/create-new-course" element={<CreateNewCourse/>}/>
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
-        <Route path="/published-courses" element={<PublishedCourses />} />
-
+        <Route path="/published-courses" element={<PublishedCourses/>}/>
         <Route path="*" element={<Home/>}/>
       </Routes>
     </div>

@@ -7,13 +7,14 @@ const initialState = {
   isStudent: true,
   isCreator: false,
   isLoggedIn: false,
+  publishedCourses: [],
   myCourses: [
-    // {
-    //   id: '1',  
-    //   title: 'test data',
-    //   author: 'test data',
-    //   image: 'test-image',
-    // }
+    {
+      id: '1',  
+      title: 'test data',
+      author: 'test data',
+      image: 'test-image',
+    }
   ],
 }
 
@@ -29,9 +30,12 @@ const userFormDataSlice = createSlice({
     },
     setLogOut: (state) => {
       state.isLoggedIn = false;
+    },
+    setPublishedCourses: (state, action) => {
+      state.publishedCourses.push(action.payload);
     }
   }
 });
 
-export const { setUserFormData, setLogIn, setLogOut } = userFormDataSlice.actions;
+export const { setUserFormData, setLogIn, setLogOut, setPublishedCourses } = userFormDataSlice.actions;
 export default userFormDataSlice.reducer;

@@ -1,17 +1,81 @@
-import React from 'react'
+import React, { useState } from "react";
 
-const Curiculum = () => {
+const Curriculum = ({setCurriculumData}) => {
+  const [lectures, setLectures] = useState([]);
+
+  // Function to add a lecture
+  const handleAddLectureBtn = () => {
+    setLectures((prev) => [...prev, { id: Date.now(), name: "" }]); // Adding a unique ID
+  };
+
+  // Function to delete a lecture
+  const handleDeleteLecture = (idToDelete) => {
+    setLectures((prev) => prev.filter((lecture) => lecture.id !== idToDelete));
+  };
+
+  // Function to update lecture name
+  const handleLectureNameChange = (id, newName) => {
+    setLectures((prev) =>
+      prev.map((lecture) =>
+        lecture.id === id ? { ...lecture, name: newName } : lecture
+      )
+    );
+  };
+
+  const handleSaveBtn = () =>{
+    console.log('lectures: ', lectures);
+    setCurriculumData(lectures);
+  }
+
+  //console.log(lectures)
   return (
     <>
-      <div className='flex-col flex p-4'>
-        <span className='font-bold'>Create Curriculum</span>
-        <button className='bg-gray-900 p-1 px-2 rounded text-amber-50 w-max mt-6 cursor-pointer'>Add Lecture</button>
+      <div className="flex-col flex p-4">
+        <span className="font-bold">Create Curriculum</span>
+        <div className="flex gap-4 font-medium">
+          <button
+            className="bg-gray-900 p-1 px-2 rounded text-gray-50 w-max mt-6 cursor-pointer"
+            onClick={handleAddLectureBtn}
+          >Add Lecture</button>
+          {(lectures.length > 0) ? 
+          <button 
+            onClick={handleSaveBtn}
+            className="bg-gray-900 p-1 px-2 rounded text-gray-50 w-max mt-6 cursor-pointer">Save</button> : '' }
+        </div>
       </div>
-      <div className='flex border h-20'>
-
+      {lectures.map((lecture, index) => (
+      <div
+        key={lecture.id} // Unique key
+        className="flex flex-col justify-start items-start border h-max w-max mb-4 ml-4 p-4 gap-4 rounded font-medium"
+      >
+        <label>
+          Lecture {index + 1}:
+          <input
+            type="text"
+            value={lecture.name}
+            placeholder="Name of the lecture"
+            className="p-1 border rounded ml-2"
+            onChange={(e) => handleLectureNameChange(lecture.id, e.target.value)}
+          />
+        </label>
+        <div className="flex flex-col gap-4">
+          <div className="h-30 w-60 border rounded bg-gray-400 items-center justify-center flex">Lecture Video</div>
+          <div className="font-medium flex gap-2 flex-wrap justify-start items-center">
+            <button className="bg-gray-900 p-1 px-2 rounded text-gray-50 h-max w-max cursor-pointer">
+              Change video
+            </button>
+            <button
+              className="bg-red-800 p-1 px-2 rounded text-gray-50 h-max w-max cursor-pointer"
+              onClick={() => handleDeleteLecture(lecture.id)}
+            >
+              Delete lecture
+            </button>
+          </div>
+        </div>
       </div>
+      ))}
     </>
-  )
-}
+  );
+};
 
-export default Curiculum
+export default Curriculum;

@@ -12,9 +12,7 @@ const MenuBar = () => {
   const creator = formDataFromStore.isCreator;
   const student = formDataFromStore.isStudent;
   
-  useEffect(() => {
-    console.log(formDataFromStore);
-  }, [formDataFromStore]);
+  //console.log(formDataFromStore)
 
   // Reset profile dropdown upon navigating to auth pages
   useEffect(() => {
@@ -36,13 +34,11 @@ const MenuBar = () => {
           to={'home'}
           className={({ isActive }) => isActive ? "text-blue-600 bg-gray-200 p-1 px-3 rounded-2xl font-medium duration-300" : "text-gray-300 font-medium transition-all duration-300"}
         >LMS</NavLink>
-
         {/* render only if logged in user is a Student */}
-        {student && <NavLink 
+        {/* {student && <NavLink 
           to={'explore-courses'}
           className={({ isActive }) => isActive ? "text-blue-600 bg-gray-200 p-1 px-2 rounded-2xl font-medium duration-300" : "text-gray-300 font-medium transition-all duration-300"}
-        >Explore Courses</NavLink> }
-        
+        >Explore Courses</NavLink> } */}
         {/* render only if logged in user is a Creator */}
         {creator && <NavLink 
           to={'create-new-course'}
@@ -50,12 +46,10 @@ const MenuBar = () => {
         >Create New Course</NavLink> }
       </div>
       <div className='flex justify-center items-center gap-2 sm:gap-6'>
-        {student && <NavLink 
+        {/* <NavLink 
           to={'my-courses'}
           className={({ isActive }) => isActive ? "text-blue-600 font-medium bg-gray-200 p-1 px-3 rounded-2xl transition-all duration-300" : "text-gray-300 font-medium p-1 px-3 transition-all duration-300"}
-        >My Courses</NavLink>
-        }
-
+        >My Courses</NavLink> */}
         {/* render only if logged in user is a Creator */}
         {creator && <NavLink 
           to={'/published-courses'}
