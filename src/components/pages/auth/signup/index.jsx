@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setLogIn, setUserFormData } from '../userFormDataSlice';
+import { setLogIn, setUserFormData, setCreatorMode, setIsStudent } from '../userFormDataSlice';
 
 const SignUp = () => {
 
@@ -14,13 +14,11 @@ const SignUp = () => {
   const [isDisabled, setIsDisabled ] = useState(true);
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
-  const displayUserFormData = useSelector(state => state.userFormData)
   
    // Update isDisabled based on form data
-   useEffect(() => {
+  useEffect(() => {
     const { name, email, password } = formData;
-    setIsDisabled(!(name && email && password)); 
-    // Disable if any field is empty
+    setIsDisabled(!(name && email && password));// Disable submit button if any field is empty
   }, [formData]);
   
   const handleChange = (event) =>{
@@ -46,7 +44,6 @@ const SignUp = () => {
       email: '',
       password: ''
     });
-
     navigate('/home');
   };
 
@@ -54,8 +51,6 @@ const SignUp = () => {
     event.preventDefault();
     navigate('/auth/signin'); // Navigate to SignIn page
   }
-
-  //console.log("Global Form Data:", displayUserFormData)
 
   return (
     <div 

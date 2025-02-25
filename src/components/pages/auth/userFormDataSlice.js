@@ -5,7 +5,9 @@ const initialState = {
   email: "",
   password: "",
   isStudent: true,
-  isCreator: false,
+  studentMode: true,
+  isCreator: true,
+  creatorMode: false,
   isLoggedIn: false,
   publishedCourses: [],
   myCourses: [
@@ -31,11 +33,22 @@ const userFormDataSlice = createSlice({
     setLogOut: (state) => {
       state.isLoggedIn = false;
     },
+    setIsStudent: (state, action) => {
+      state.isStudent = action.payload;
+    },
+    setIsCreator: (state, action) => {
+      state.isStudent = action.payload;
+    },
+    setCreatorMode: (state, action) => {
+      state.creatorMode = action.payload;
+    },
     setPublishedCourses: (state, action) => {
       state.publishedCourses.push(action.payload);
-    }
-  }
-});
+    },
+    setStudentMode: (state, action) => {
+      state.studentMode = action.payload;
+    },
+}});
 
-export const { setUserFormData, setLogIn, setLogOut, setPublishedCourses } = userFormDataSlice.actions;
+export const { setUserFormData, setLogIn, setLogOut, setPublishedCourses, setIsStudent, setIsCreator, setCreatorMode, setStudentMode } = userFormDataSlice.actions;
 export default userFormDataSlice.reducer;
