@@ -50,7 +50,7 @@ const MenuBar = () => {
     dispatch(setStudentMode(!newState)); 
     dispatch(setCreatorMode(newState)); 
   
-    console.log("isCreatorModeToggled", newState);
+    //console.log("isCreatorModeToggled", newState);
   };
   
   const handleBecomeCreatorBtn = ()=> {
