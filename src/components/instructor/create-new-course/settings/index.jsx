@@ -1,32 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const CourseSettings = ({setSettingsData}) => {
 
+  const [preview, setPreview] = useState(null);
+  const [isDisabled, setIsDisabled] = useState(true);
+
+
   function saveThumbnail(){
-    setSettingsData({imageSrc:'image'})
-    //console.log('imageSrc: image')
+    setSettingsData({ imageURL: preview });
   }
 
+  const handleImageUploader = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageURL = URL.createObjectURL(file)
+      setPreview(imageURL); // Create a temporary URL for preview
+    }
+  };
+
+  useEffect(()=>{
+    setIsDisabled(false)
+  },[preview])
+
   return (
-    <>
-      <div className="flex-col flex p-4">
-        <span className="font-bold mb-4">Course Thumbnail:</span>
-        <div className='border p-4 rounded w-max'>
-          <div 
-            className="h-30 w-60 border rounded bg-gray-400 items-center justify-center flex"
-          >Course thumbnail</div>
-          <div 
-            className="font-medium flex gap-2 flex-wrap justify-start items-center p-4">
-            <button className="bg-gray-900 p-1 px-2 rounded text-gray-50 h-max w-max cursor-pointer"
-            >Change</button>
-            <button
-              className="bg-green-800 p-1 px-2 rounded text-gray-50 h-max w-max cursor-pointer"
-              onClick={() => saveThumbnail()}
-            >Save</button>
-          </div> 
-        </div>
-      </div>
-    </>
+    <div className="flex-col flex p-4 items-start justify-center">
+      <span className="font-bold mb-4 w-max">Course Thumbnail:</span>
+      {preview && <img 
+        src={preview} 
+        alt="Preview"
+        className='flex justify-center items-center h-30 w-60 border rounded overflow-hidden' />
+      }
+      <div 
+        className="font-medium flex gap-2 flex-wrap justify-start items-center p-4">
+        <input 
+          className='border cursor-pointer rounded px-1 w-[70%]'
+          type="file" 
+          accept='image/*' 
+          onChange={handleImageUploader} 
+        />
+        <button
+          className={` p-1 px-2 rounded text-gray-50 h-max w-max ${isDisabled ? 'bg-gray-600 cursor-not-allowed' : 'bg-gray-900 cursor-pointer' }`}
+          onClick={() => saveThumbnail()}
+          disabled={isDisabled}
+        >Save</button>
+      </div> 
+    </div>
   )
 }
 

@@ -5,13 +5,13 @@ const ExploreCourses = () => {
 
   return (
     <div className='flex flex-col justify-start items-center h-full bg-gray-900 gap-4'>
-      <div className='flex justify-around items-center p-2 gap-2 bg-gray-600 h-10 min-w-full'>
+      {/* <div className='flex justify-around items-center p-2 gap-2 bg-gray-600 h-10 min-w-full'>
         <span className='font-medium mb-3 text-sm text-gray-50 text-center'>Course Categories</span>
         <button 
             className='bg-gray-200 hover:bg-gray-100 rounded text-black text-xs p-1 cursor-pointer transition-all'
         >Web Development</button>
-      </div>
-      <div className='flex sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 mt-4'>
+      </div> */}
+      <div className='flex sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 mt-8'>
       { CoursesList?.map( (item) => 
       <div 
         key={item.id}
