@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Curriculum from './curriculum';
 import { useNavigate } from 'react-router-dom';
 import CourseLandingPage from './course-landing-page';
@@ -8,6 +8,7 @@ import { setPublishedCourses } from '../../pages/auth/userFormDataSlice'
 
 const CreateNewCourse = () => {
 
+  const [isDisabled, setIsDisabled] = useState(true)
   const [activeTab, setActiveTab] = useState("Curriculum");
   const [ curriculumData, setCurriculumData ] = useState([]);
   const [ landingPageData, setLandingPageData ] = useState({});
@@ -29,24 +30,32 @@ const CreateNewCourse = () => {
     navigate('/published-courses')
   }
 
+  useEffect(() => {
+    const isFormComplete = 
+      curriculumData.length > 0 && // Ensure there's at least one lecture
+      Object.keys(landingPageData).length > 0 && // Ensure landing page data isn't empty
+      Object.keys(settingsData).length > 0; // Ensure settings data isn't empty
+  
+    setIsDisabled(!isFormComplete);
+  }, [curriculumData, landingPageData, settingsData]);
+
+  //console.log(curriculumData, landingPageData, settingsData)
 
   return (
     <div className="flex flex-col justify-start items-start h-screen bg-gray-100 gap-2">
-      <div className="flex justify-between items-center bg-gray-800 p-4 sm:p-6 w-full shadow-lg text-gray-50">
+      <div className="flex justify-between items-center bg-gray-900 p-4 sm:p-6 w-full shadow-lg text-gray-50">
         <div className="flex justify-center items-center font-bold">
           <span>Course Creation</span>
         </div>
         <div className="flex gap-4">
           <button 
             onClick={handleCancelBtn}
-            className="bg-gray-600 text-gray-50 px-3 font-medium py-1 cursor-pointer rounded hover:bg-gray-700 transition">
-            Cancel
-          </button>
+            className="bg-gray-700 text-gray-50 px-3 font-medium py-1 cursor-pointer rounded hover:bg-gray-700 transition"
+          >Cancel</button>
           <button 
             onClick={handlePublishBtn}
-            className="bg-gray-600 text-gray-50 font-medium px-3 py-1 cursor-pointer rounded hover:bg-gray-700 transition">
-            Publish
-          </button>
+            className={`text-gray-50 font-medium px-3 py-1 rounded transition ${isDisabled ? 'bg-gray-400 cursor-not-allowed' :'bg-gray-700 cursor-pointer' }`}
+          >Publish</button>
         </div>
       </div>
       <div className='flex flex-col justify-start items-start p-4 w-full h-full rounded'>

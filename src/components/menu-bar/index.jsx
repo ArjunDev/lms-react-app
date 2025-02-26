@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { setLogOut, setIsStudent, setCreatorMode, setStudentMode } from '../pages/auth/userFormDataSlice';
+import { setLogOut, setCreatorMode, setStudentMode, setIsCreator } from '../pages/auth/userFormDataSlice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 
 const MenuBar = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
   const [profileActive, setProfileActive] = useState(false);
   const [isCreatorModeToggled, setIsCreatorModeToggled] = useState(false);
-  const dispatch = useDispatch();
 
   const formDataFromStore = useSelector(state => state.userFormData);
   const isLoggedIn = formDataFromStore.isLoggedIn;
@@ -52,8 +53,10 @@ const MenuBar = () => {
     console.log("isCreatorModeToggled", newState);
   };
   
+  const handleBecomeCreatorBtn = ()=> {
+    dispatch(setIsCreator(true))
+  }
   
-
   return (
     <>
     <div 
@@ -102,6 +105,7 @@ const MenuBar = () => {
         >Change Profile</button>
         {(!isCreator && isLoggedIn) && (
           <button 
+            onClick={handleBecomeCreatorBtn}
             className='p-1 px-2 rounded cursor-pointer w-full transition-all duration-300 text-gray-300 hover:bg-gray-200 hover:text-gray-900'
           >Become Creator</button>
         )}

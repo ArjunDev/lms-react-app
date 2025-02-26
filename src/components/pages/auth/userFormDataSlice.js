@@ -6,7 +6,7 @@ const initialState = {
   password: "",
   isStudent: true,
   studentMode: true,
-  isCreator: true,
+  isCreator: false,
   creatorMode: false,
   isLoggedIn: false,
   publishedCourses: [],
@@ -16,7 +16,17 @@ const initialState = {
       title: 'test data',
       author: 'test data',
       image: 'test-image',
-    }
+    },    {
+      id: '1',  
+      title: 'test data',
+      author: 'test data',
+      image: 'test-image',
+    },    {
+      id: '1',  
+      title: 'test data',
+      author: 'test data',
+      image: 'test-image',
+    },
   ],
 }
 
@@ -37,7 +47,7 @@ const userFormDataSlice = createSlice({
       state.isStudent = action.payload;
     },
     setIsCreator: (state, action) => {
-      state.isStudent = action.payload;
+      state.isCreator = action.payload;
     },
     setCreatorMode: (state, action) => {
       state.creatorMode = action.payload;

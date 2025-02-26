@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Curriculum = ({setCurriculumData}) => {
   const [lectures, setLectures] = useState([]);
+  const [isDisabled, setIsDisabled ] = useState(true);
 
   // Function to add a lecture
   const handleAddLectureBtn = () => {
@@ -22,8 +23,15 @@ const Curriculum = ({setCurriculumData}) => {
     );
   };
 
-  const handleSaveBtn = () =>{
-    console.log('lectures: ', lectures);
+  // Disable Save button if any field is empty
+  useEffect(() => {
+    const allLecturesHaveNames = lectures.length > 0 && lectures.every(lecture => lecture.name.trim() !== "");
+    setIsDisabled(!allLecturesHaveNames);
+  }, [lectures]);
+  
+
+  const handleSaveFormaData = () =>{
+    //console.log('lectures: ', lectures);
     setCurriculumData(lectures);
   }
 
@@ -38,9 +46,14 @@ const Curriculum = ({setCurriculumData}) => {
             onClick={handleAddLectureBtn}
           >Add Lecture</button>
           {(lectures.length > 0) ? 
-          <button 
-            onClick={handleSaveBtn}
-            className="bg-gray-900 p-1 px-2 rounded text-gray-50 w-max mt-6 cursor-pointer">Save</button> : '' }
+            <button 
+              onClick={handleSaveFormaData}
+              disabled={isDisabled}
+              type="submit"
+              className={`w-max rounded p-1 px-4 mt-6 text-gray-50 font-bold ${
+                isDisabled ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-800 hover:bg-gray-700 cursor-pointer'
+              }`}
+            >Save</button> : '' }
         </div>
       </div>
       {lectures.map((lecture, index) => (

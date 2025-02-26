@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const CourseLandingPage = ({setLandingPageData}) => {
+
+  const [isDisabled, setIsDisabled ] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -21,6 +23,12 @@ const CourseLandingPage = ({setLandingPageData}) => {
     console.log('Form Data Submitted:', formData);
     setLandingPageData(formData);
   };
+
+    // Update isDisabled based on form data
+    useEffect(() => {
+      const { title, description, price, primaryLanguage, level } = formData;
+      setIsDisabled(!(title && description && price && primaryLanguage && level));// Disable Save button if any field is empty
+  }, [formData]);
 
   return (
     <div 
@@ -85,8 +93,11 @@ const CourseLandingPage = ({setLandingPageData}) => {
           </select>
         </label>
         <button 
+          disabled={isDisabled}
           type="submit"
-          className="w-max bg-gray-800 rounded p-1 px-4 mt-2 text-gray-50 hover:bg-gray-700 font-bold cursor-pointer"
+          className={`w-max rounded p-1 px-4 mt-2 text-gray-50 font-bold ${
+            isDisabled ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-800 hover:bg-gray-700 cursor-pointer'
+          }`}
         >Save</button>
       </form>
     </div>

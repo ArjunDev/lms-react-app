@@ -3,8 +3,8 @@ import React from 'react'
 const CourseSettings = ({setSettingsData}) => {
 
   function saveThumbnail(){
-    setSettingsData('image')
-    console.log('setings: image')
+    setSettingsData({imageSrc:'image'})
+    //console.log('imageSrc: image')
   }
 
   return (

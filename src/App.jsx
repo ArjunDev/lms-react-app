@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
-import MenuBar from "./components/menu-bar"
 import { Route, Routes, useLocation } from "react-router-dom"
+import MenuBar from "./components/menu-bar"
 import Home from "./components/pages/home"
 import ExploreCourses from "./components/pages/explore-courses"
 import MyCourses from "./components/pages/my-courses"

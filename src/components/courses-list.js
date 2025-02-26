@@ -23,7 +23,7 @@ const CoursesList = [
     title: 'course-4',
     author: 'author-4',
     image: 'image-4',
-  }
+  },
 ];
 
 export default CoursesList;
