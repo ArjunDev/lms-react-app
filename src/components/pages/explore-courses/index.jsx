@@ -11,15 +11,22 @@ const ExploreCourses = () => {
             className='bg-gray-200 hover:bg-gray-100 rounded text-black text-xs p-1 cursor-pointer transition-all'
         >Web Development</button>
       </div> */}
-      <div className='flex sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 mt-8'>
-      { CoursesList?.map( (item) => 
+      <div className='flex sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-4 mt-8'>
+      { CoursesList?.map( (item, index) => 
       <div 
-        key={item.id}
-        className='flex flex-col justify-center items-center bg-gray-50 p-2 rounded-2xl gap-1.5'>
-        <div className='bg-gray-200 rounded-2xl h-30 w-35 sm:h-50 sm:w-50 flex justify-center items-center'>{item.image}</div>
-        <span className='font-medium'>{item.title}</span>
-        <span>Author: {item.author}</span>
-        <button className='px-4 py-1 bg-gray-900 rounded-2xl text-white w-max sm:w-full hover:bg-gray-800 cursor-pointer'>See details</button>
+        key={index}
+        className='flex flex-col justify-center items-center bg-gray-100 p-2 rounded-2xl gap-1.5'>
+        <img 
+          className='rounded-2xl h-36 w-72 sm:h-50 sm:w-96 flex justify-center items-center object-center'
+          src={item.settingsData.imageURL}
+        />
+        <span 
+          className='font-medium'
+        >{item.landingPageData.title}</span>
+        <span className='text-sm'>Author: ArjunDev</span>
+        <button 
+          className='px-4 py-1.5 bg-gray-900 rounded-2xl text-white w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer'
+        >See details</button>
       </div> 
       )}
       </div>

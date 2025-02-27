@@ -1,31 +1,24 @@
 import React, { useState } from 'react';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import CoursesList from '../../courses-list'
 
 const Home = () => {
 
-  const images = [
-    "https://imageplaceholder.net/600x400", // Replace with your images
-    "https://imageplaceholder.net/600x400",
-    "https://imageplaceholder.net/600x400",
-    "https://imageplaceholder.net/600x400",
-    "https://imageplaceholder.net/600x400",
-  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const images = CoursesList?.map((item) => item.settingsData.imageURL);
 
-  
-    const [currentIndex, setCurrentIndex] = useState(0);
-  
-    const nextSlide = () => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      );
-    };
-  
-    const prevSlide = () => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === 0 ? images.length - 1 : prevIndex - 1
-      );
-    };
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
 
   return (
     <div className='flex flex-col justify-center items-center p-4 py-8 gap-6 h-full w-full sm:p-16'>
@@ -33,11 +26,11 @@ const Home = () => {
         className='flex flex-1 justify-center items-center rounded-2xl overflow-hidden relative max-w-3xl max-h-96'>
         {/* Images Wrapper */}
         <div
-          className={`flex transition-transform duration-500 ease-in-out`}
+          className={`flex transition-transform duration-500 ease-in-out h-64 sm:h-96`}
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
           {images.map((image, index) => (
-            <img key={index} src={image} alt={`slide-${index}`} className="w-full rounded-lg flex-shrink-0" />))
+            <img key={index} src={image} alt={`slide-${index}`} className="w-full rounded-lg flex-shrink-0 object-center" />))
           }
         </div>
         {/* Left Button */}

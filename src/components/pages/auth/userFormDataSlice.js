@@ -9,19 +9,13 @@ const initialState = {
   isCreator: false,
   creatorMode: false,
   isLoggedIn: false,
-  publishedCourses: [],
+  publishedCourses: [{
+    curriculumData: [{id: '1', name: 'lecture-1'}],
+    landingPageData: {description: 'react js desc', level: '1', price: '20',  primaryLanguage:'english', title:'react js' },
+    settingsData: {imageURL:''}
+  }],
   myCourses: [
     {
-      id: '1',  
-      title: 'test data',
-      author: 'test data',
-      image: 'test-image',
-    },    {
-      id: '1',  
-      title: 'test data',
-      author: 'test data',
-      image: 'test-image',
-    },    {
       id: '1',  
       title: 'test data',
       author: 'test data',

@@ -1,29 +1,20 @@
 
 const CoursesList = [
   {
-    id: '1',  
-    title: 'course-1',
-    author: 'author-1',
-    image: 'image-1',
+    curriculumData: [{id: '1', name: 'lecture-1'}],
+    landingPageData: {description: 'Tailwicss desc', level: '1', price: '20',  primaryLanguage:'english', title:'Fundamentals of Tailwincss' },
+    settingsData: {imageURL:'/lms-react-app/images/tailwindcss.webp'}
   },
   {
-    id: '2',  
-    title: 'course-2',
-    author: 'author-2',
-    image: 'image-2',
+    curriculumData: [{id: '2', name: 'lecture-1'}],
+    landingPageData: {description: 'react js desc', level: '1', price: '20',  primaryLanguage:'english', title:'Basics of React JS' },
+    settingsData: {imageURL:'/lms-react-app/images/reactjs.webp'}
   },
   {
-    id: '3',  
-    title: 'course-3',
-    author: 'author-3',
-    image: 'image-3',
-  },
-  {
-    id: '4',  
-    title: 'course-4',
-    author: 'author-4',
-    image: 'image-4',
-  },
-];
+    curriculumData: [{id: '3', name: 'lecture-1'}],
+    landingPageData: {description: 'js desc', level: '1', price: '20',  primaryLanguage:'english', title:'Fundamentals of JavaScript' },
+    settingsData: {imageURL:'/lms-react-app/images/javascript.webp'}
+  }
+]
 
 export default CoursesList;
