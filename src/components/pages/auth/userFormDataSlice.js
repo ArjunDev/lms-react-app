@@ -9,11 +9,23 @@ const initialState = {
   isCreator: false,
   creatorMode: false,
   isLoggedIn: false,
-  publishedCourses: [{
-    curriculumData: [{id: '1', name: 'lecture-1'}],
-    landingPageData: {description: 'react js desc', level: '1', price: '20',  primaryLanguage:'english', title:'react js' },
-    settingsData: {imageURL:''}
-  }],
+  publishedCourses: [
+    {
+      curriculumData: [{id: '1', name: 'lecture-1'}],
+      landingPageData: {courseId: '1234', description: 'Tailwicss desc', level: '1', price: '20',  primaryLanguage:'English', title:'Fundamentals of Tailwincss' },
+      settingsData: {imageURL:'/lms-react-app/images/tailwindcss.webp'}
+    },
+    {
+      curriculumData: [{id: '2', name: 'lecture-1'}],
+      landingPageData: {courseId: '12345', description: 'react js desc', level: '1', price: '30',  primaryLanguage:'English', title:'Basics of React JS' },
+      settingsData: {imageURL:'/lms-react-app/images/reactjs.webp'}
+    },
+    {
+      curriculumData: [{id: '3', name: 'lecture-1'}, {id: '3', name: 'lecture-2'}],
+      landingPageData: {courseId: '123456', description: 'js desc', level: '1', price: '10',  primaryLanguage:'English', title:'Fundamentals of JavaScript' },
+      settingsData: {imageURL:'/lms-react-app/images/javascript.webp'}
+    }
+  ],
   myCourses: [
     {
       id: '1',  

@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import CoursesList from '../../courses-list'
+import { useSelector } from 'react-redux';
 
 const Home = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = CoursesList?.map((item) => item.settingsData.imageURL);
+
+  const PublishedCoursesFromStore = useSelector(state=> state.userFormData.publishedCourses);
+
+  const images = PublishedCoursesFromStore?.map((item) => item.settingsData.imageURL);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>

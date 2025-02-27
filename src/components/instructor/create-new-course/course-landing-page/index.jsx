@@ -4,10 +4,11 @@ const CourseLandingPage = ({setLandingPageData}) => {
 
   const [isDisabled, setIsDisabled ] = useState(true);
   const [formData, setFormData] = useState({
+    courseId: Date.now() + Math.random().toString(36).substring(2,9),//to create uniq id
     title: '',
     description: '',
     price: '',
-    primaryLanguage: 'english',
+    primaryLanguage: 'English',
     level: '1'
   });
 
@@ -75,9 +76,9 @@ const CourseLandingPage = ({setLandingPageData}) => {
             value={formData.primaryLanguage}
             onChange={handleInputChange}
           >
-            <option value="english" defaultValue>English</option>
-            <option value="french">French</option> 
-            <option value="chinese">Chinese</option>
+            <option value="English" defaultValue>English</option>
+            <option value="French">French</option> 
+            <option value="Chinese">Chinese</option>
           </select>
         </label>
         <label>Level:

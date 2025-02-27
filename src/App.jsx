@@ -10,6 +10,7 @@ import SignIn from "./components/pages/auth/signin"
 import SignUp from "./components/pages/auth/signup";
 import ProtectedRoute from "./components/protected-routes"
 import { useSelector } from "react-redux"
+import CourseDetails from "./components/pages/course-details"
 
 function App() {
   
@@ -35,7 +36,8 @@ function App() {
         <Route path="/my-courses" element={<MyCourses/>}/>
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
-        
+        <Route path="/explore-courses/course/:id" element={<CourseDetails />} />
+
         {/* Protected Routes */}
         <Route 
           path="/create-new-course" 
