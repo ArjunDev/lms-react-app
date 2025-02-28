@@ -11,6 +11,7 @@ const MenuBar = () => {
   const dispatch = useDispatch();
 
   const [profileActive, setProfileActive] = useState(false);
+  const [showBecomCreatorModal, setShowBecomCreatorModal] = useState(false);
   const [isCreatorModeToggled, setIsCreatorModeToggled] = useState(false);
 
   const formDataFromStore = useSelector(state => state.userFormData);
@@ -20,7 +21,7 @@ const MenuBar = () => {
   const studentMode = formDataFromStore.studentMode;
 
   useEffect(() => {
-    console.log(formDataFromStore);
+    //console.log(formDataFromStore);
   }, [formDataFromStore]);
 
   const handleSignOut = () => {
@@ -53,9 +54,18 @@ const MenuBar = () => {
     //console.log("isCreatorModeToggled", newState);
   };
   
-  const handleBecomeCreatorBtn = ()=> {
-    dispatch(setIsCreator(true))
-  }
+  const handleBecomeCreatorBtn = () => {
+    setShowBecomCreatorModal(true);
+  };
+
+  const handleClose = () => {
+    setShowBecomCreatorModal(false);
+  };
+
+  const handleYes = () => {
+    setShowBecomCreatorModal(false);
+    dispatch(setIsCreator(true))// redux store action
+  };
   
   return (
     <>
@@ -107,7 +117,19 @@ const MenuBar = () => {
           <button 
             onClick={handleBecomeCreatorBtn}
             className='p-1 px-2 rounded cursor-pointer w-full transition-all duration-300 text-gray-300 hover:bg-gray-200 hover:text-gray-900'
-          >Become Creator</button>
+          >Become Creator</button> 
+        )}
+        {/* Modal */}
+        {showBecomCreatorModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm p-4">
+          <div className="bg-white p-2 py-6 rounded shadow-lg text-center sm:p-6">
+            <p className="text-lg font-semibold">Are you sure you want to become a creator?</p>
+            <div className="mt-4 flex justify-center gap-4">
+              <button onClick={handleYes} className="px-4 py-2 bg-green-500 text-white rounded cursor-pointer">Yes</button>
+              <button onClick={handleClose} className="px-4 py-2 bg-red-500 text-white rounded cursor-pointer">No</button>
+            </div>
+          </div>
+        </div>
         )}
         {(isLoggedIn && isCreator) && (
           <button 

@@ -1,14 +1,17 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { setMyCourses } from '../auth/userFormDataSlice';
 const CourseDetails = () => {
 
   const { id } = useParams(); // Extract 'id' from URL
 
   const PublishedCoursesFromStore = useSelector(state => state.userFormData.publishedCourses);
-  const MyCoursesFromStore = useSelector(state=> state.userFormData.myCourses)
+  const MyCoursesFromStore = useSelector(state=> state.userFormData.myCourses);
+  const userDataFromStore = useSelector(state => state.userFormData)
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Find the selected course based on 'id'
   const course = PublishedCoursesFromStore?.find(item => item.landingPageData.courseId === id);
@@ -26,7 +29,13 @@ const CourseDetails = () => {
     const description = course.landingPageData.description;
     const imageURl = course.settingsData.imageURL;
 
-    dispatch(setMyCourses({title, courseId, description, imageURl}))
+    if(userDataFromStore.isLoggedIn){
+      dispatch(setMyCourses({title, courseId, description, imageURl}));
+    }else{
+      navigate('/auth/signin');
+    }
+
+    
     //console.log(course);
   }
 

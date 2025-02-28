@@ -32,10 +32,10 @@ function App() {
       <Routes>
         <Route path="*" element={<Home/>}/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/explore-courses" element={<ExploreCourses/>}/>
-        <Route path="/my-courses" element={<MyCourses/>}/>
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
+        <Route path="/my-courses" element={<MyCourses/>}/>
+        <Route path="/explore-courses" element={<ExploreCourses/>}/>
         <Route path="/explore-courses/course/:id" element={<CourseDetails />} />
 
         {/* Protected Routes */}
