@@ -6,7 +6,7 @@ const ExploreCourses = () => {
   
   const PublishedCoursesFromStore = useSelector(state=> state.userFormData.publishedCourses);
 
-  console.log(PublishedCoursesFromStore)
+  //console.log(PublishedCoursesFromStore)
   return (
     <div className='flex flex-col justify-start items-center h-full bg-gray-900 gap-4'>
       <div className='flex sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-4 mt-8'>
@@ -15,7 +15,7 @@ const ExploreCourses = () => {
         key={index}
         className='flex flex-col justify-center items-center bg-gray-100 p-2 rounded-2xl gap-1.5'>
         <img 
-          className='rounded-2xl h-36 w-72 sm:h-50 sm:w-96 flex justify-center items-center object-center'
+          className='rounded-2xl h-36 w-72 sm:h-50 sm:w-96 flex justify-center items-center object-center shadow-md'
           src={item.settingsData.imageURL}
         />
         <span 

@@ -1,17 +1,35 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
+import { setMyCourses } from '../auth/userFormDataSlice';
 const CourseDetails = () => {
+
   const { id } = useParams(); // Extract 'id' from URL
+
   const PublishedCoursesFromStore = useSelector(state => state.userFormData.publishedCourses);
+  const MyCoursesFromStore = useSelector(state=> state.userFormData.myCourses)
+  const dispatch = useDispatch();
 
   // Find the selected course based on 'id'
   const course = PublishedCoursesFromStore?.find(item => item.landingPageData.courseId === id);
 
+  //check whether course is already exist in user My Courses
+  const isCourseExists = MyCoursesFromStore.some(course => course.courseId === id)
+
   if (!course) {
     return <div className="text-center text-red-500 font-bold mt-28">Course Not Found</div>;
   }
+
+  const handleBuyNowBtn = () =>{
+    const title = course.landingPageData.title;
+    const courseId = course.landingPageData.courseId
+    const description = course.landingPageData.description;
+    const imageURl = course.settingsData.imageURL;
+
+    dispatch(setMyCourses({title, courseId, description, imageURl}))
+    //console.log(course);
+  }
+
 
   return (
     <div className="flex flex-col h-[96%] p-4 sm:p-8 gap-4">
@@ -40,14 +58,23 @@ const CourseDetails = () => {
         </div>
 
         {/* Course Sidebar */}
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 p-2 shadow-md rounded bg-gray-100">
+        <div className="flex flex-1 flex-col items-center justify-center gap-3 p-2 shadow-md rounded bg-gray-100">
           <img 
             src={course.settingsData.imageURL} 
             alt={course.landingPageData.title} 
             className="min-h-24 min-w-36 max-h-56 object-center rounded"
           />
-          <span className='font-medium'>Price: ${course.landingPageData.price}</span>
-          <button className="bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer">Buy Now</button>
+          { !isCourseExists ? <span className='font-medium'>Price: ${course.landingPageData.price}</span> : ''}
+          
+          { isCourseExists ? 
+            <button 
+              className="bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
+            >Start Watching</button>  : 
+            <button 
+              onClick={handleBuyNowBtn}
+              className="bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
+            >Buy Now</button>
+          }
         </div>
       </div>
     </div>

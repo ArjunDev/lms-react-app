@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ isCreator, creatorMode, isLoggedIn, children }) => {
 
-  console.log("isCreator:",isCreator,"creatorMode:",creatorMode,"isLoggedIn:",isLoggedIn)
+  //console.log("isCreator:",isCreator,"creatorMode:",creatorMode,"isLoggedIn:",isLoggedIn)
 
   if (!isCreator || !creatorMode || !isLoggedIn) {
     console.log("Hello from Protected Routes")
