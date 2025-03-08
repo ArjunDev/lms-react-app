@@ -74,13 +74,13 @@ const MenuBar = () => {
       <div className='flex justify-center items-center gap-3 sm:gap-6'>
         <NavLink 
           to={'home'}
-          className={({ isActive }) => isActive ? "text-blue-600 bg-gray-200 p-1 px-3 rounded-2xl font-medium duration-300" : "text-gray-300 font-medium transition-all duration-300"}
+          className={({ isActive }) => isActive ? "text-blue-600 bg-gray-50 p-1 px-3 rounded-2xl font-medium duration-300" : "text-gray-300 font-medium transition-all duration-300"}
         >LMS</NavLink>
 
         {/* render only if logged in user is a Student */}
         {(studentMode && !creatorMode) && <NavLink 
           to={'explore-courses'}
-          className={({ isActive }) => isActive ? "text-blue-600 bg-gray-200 p-1 px-2 rounded-2xl font-medium duration-300" : "text-gray-300 font-medium transition-all duration-300"}
+          className={({ isActive }) => isActive ? "text-blue-600 bg-gray-50 p-1 px-2 rounded-2xl font-medium duration-300" : "text-gray-300 font-medium transition-all duration-300"}
         >Explore Courses</NavLink> }
         
         {/* render only if logged in user in in creatorMode */}
@@ -92,14 +92,14 @@ const MenuBar = () => {
       <div className='flex justify-center items-center gap-2 sm:gap-6'>
         {(studentMode && !creatorMode) && <NavLink 
           to={'my-courses'}
-          className={({ isActive }) => isActive ? "text-blue-600 font-medium bg-gray-200 p-1 px-3 rounded-2xl transition-all duration-300" : "text-gray-300 font-medium p-1 px-3 transition-all duration-300"}
+          className={({ isActive }) => isActive ? "text-blue-600 font-medium bg-gray-50 p-1 px-3 rounded-2xl transition-all duration-300" : "text-gray-300 font-medium p-1 px-3 transition-all duration-300"}
         >My Courses</NavLink>
         }
 
         {/* render only if logged in user in creatorMode */}
         {creatorMode && <NavLink 
           to={'/published-courses'}
-          className={({ isActive }) => isActive ? "text-blue-600 font-medium bg-gray-200 p-1 px-3 rounded-2xl transition-all" : "text-gray-300 font-medium p-1 px-3"}
+          className={({ isActive }) => isActive ? "text-blue-600 font-medium bg-gray-50 p-1 px-3 rounded-2xl transition-all" : "text-gray-300 font-medium p-1 px-3"}
           >Publised Courses</NavLink> 
         }
          <span 

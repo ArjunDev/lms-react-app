@@ -54,13 +54,13 @@ const Home = () => {
         </div>
         <div className='flex flex-1 justify-center items-center gap-2 flex-wrap'>
           <button 
-            className='bg-gray-200 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Web Development</button>
+            className='bg-gray-50 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Web Development</button>
           <button 
-            className='bg-gray-200 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Backend Development</button>
+            className='bg-gray-50 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Backend Development</button>
           <button 
-            className='bg-gray-200 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Machine Learning</button>
+            className='bg-gray-50 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Machine Learning</button>
           <button 
-            className='bg-gray-200 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Cyber Security</button>
+            className='bg-gray-50 hover:bg-gray-100 rounded text-black text-sm p-1 px-4 cursor-pointer transition-all'>Cyber Security</button>
         </div>
       </div>
     </div>

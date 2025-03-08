@@ -18,9 +18,12 @@ const PublishedCourses = () => {
           src={item.settingsData.imageURL}
           className='bg-gray-200 rounded-2xl h-36 w-72 sm:h-50 sm:w-96 flex justify-center items-center object-center'
         />
-        <span className='font-medium'>Title: {item.landingPageData.title}</span>
-        <span>Author: </span>
-        <button className='px-4 py-1.5 bg-gray-900 rounded-2xl text-white w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer'>See details</button>
+        <span className='font-medium'>{item.landingPageData.title}</span>
+        {/* <span>Author: </span> */}
+        <div className='flex gap-4 mt-1'>
+        <button className='px-3 py-1 bg-blue-600 rounded-2xl text-white w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer'>Update</button>
+        <button className='px-3 py-1 bg-red-600 rounded-2xl text-white w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer'>Delete</button>
+        </div>
       </div> 
     ) : <div 
           className='flex justify-center items-center font-bold text-gray-50'>You haven't published any courses!</div>}

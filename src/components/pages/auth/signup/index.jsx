@@ -93,11 +93,12 @@ const SignUp = () => {
             name='password'
             className='bg-gray-100 rounded p-1 ml-1'
             type="password"
+            minLength={8}
             placeholder='Enter a password' 
             value={formData.password}
             onChange={handleChange}
-          />
-        </label>
+            />
+          </label>
         </div>
         <button 
           className={`w-full flex justify-center items-center p-2 rounded-2xl font-bold text-white transition-all ${
