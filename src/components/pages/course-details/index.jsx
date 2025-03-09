@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setMyCourses } from '../auth/userFormDataSlice';
 const CourseDetails = () => {
 
   const { id } = useParams(); // Extract 'id' from URL
-
+  const [showBuyCourseModal, setShowBuyCourseModal] = useState(false);
   const PublishedCoursesFromStore = useSelector(state => state.userFormData.publishedCourses);
   const MyCoursesFromStore = useSelector(state=> state.userFormData.myCourses);
   const userDataFromStore = useSelector(state => state.userFormData)
@@ -24,20 +24,32 @@ const CourseDetails = () => {
   }
 
   const handleBuyNowBtn = () =>{
+    setShowBuyCourseModal(true);
+    //console.log(course);
+  }
+
+  const handleCancle = () => {
+    setShowBuyCourseModal(false);
+  };
+
+  const handleProceed = () => {
+
     const title = course.landingPageData.title;
     const courseId = course.landingPageData.courseId
     const description = course.landingPageData.description;
     const imageURl = course.settingsData.imageURL;
 
+    setShowBuyCourseModal(false);
+
     if(userDataFromStore.isLoggedIn){
       dispatch(setMyCourses({title, courseId, description, imageURl}));
+      navigate('/my-courses')
     }else{
       navigate('/auth/signin');
     }
-
-    
-    //console.log(course);
-  }
+    // dispatch(setIsCreator(true))// redux store action
+  };
+  
 
 
   return (
@@ -86,6 +98,22 @@ const CourseDetails = () => {
           }
         </div>
       </div>
+      {/* Modal */}
+      {showBuyCourseModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm p-4">
+          <div className="bg-white p-6 rounded-2xl shadow-lg text-center sm:p-6">
+            <p className="text-lg font-semibold">Make a dummy payment!</p>
+            <div className="mt-4 flex justify-center gap-4">
+              <button 
+                onClick={handleProceed} 
+                className="px-4 py-2 bg-green-500 text-white rounded cursor-pointer shadow-md">Proceed</button>
+              <button 
+                onClick={handleCancle} 
+                className="px-4 py-2 bg-red-500 text-white rounded cursor-pointer shadow-md">Cancle</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

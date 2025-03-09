@@ -21,7 +21,7 @@ const MenuBar = () => {
   const studentMode = formDataFromStore.studentMode;
 
   useEffect(() => {
-    //console.log(formDataFromStore);
+    console.log(formDataFromStore);
   }, [formDataFromStore]);
 
   const handleSignOut = () => {
