@@ -7,8 +7,10 @@ const MyCourses = () => {
   const navigate = useNavigate();
 
   //getting  myCourse data from global store
-  const myMcoursesDataFromStore = useSelector(state=> state.userFormData.myCourses);
-  const isLoggedInFromStore = useSelector(state=> state.userFormData.isLoggedIn);
+  const myMcoursesDataFromStore = useSelector(state=> state.userFormData.currentUser.myCourses);
+  const isLoggedInFromStore = useSelector(state=> state.userFormData.currentUser.isLoggedIn);
+
+//console.log(myMcoursesDataFromStore)
 
   // Check if all objects have empty values
   const isEmpty = myMcoursesDataFromStore.every(item => 

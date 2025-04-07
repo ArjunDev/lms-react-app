@@ -14,22 +14,26 @@ const MenuBar = () => {
   const [showBecomCreatorModal, setShowBecomCreatorModal] = useState(false);
   const [isCreatorModeToggled, setIsCreatorModeToggled] = useState(false);
 
-  const formDataFromStore = useSelector(state => state.userFormData);
+  const formDataFromStore = useSelector(state => state.userFormData.currentUser);
   const isLoggedIn = formDataFromStore.isLoggedIn;
   const isCreator = formDataFromStore.isCreator;
   const creatorMode = formDataFromStore.creatorMode;
   const studentMode = formDataFromStore.studentMode;
 
-  useEffect(() => {
-    console.log(formDataFromStore);
-  }, [formDataFromStore]);
+  // console.log(isLoggedIn)
+  console.log('currentUser Data:', formDataFromStore)
+
+
+
+  // useEffect(() => {
+  //   console.log(formDataFromStore);
+  // }, [formDataFromStore]);
 
   const handleSignOut = () => {
     setIsCreatorModeToggled(false);//local state
-
     dispatch(setLogOut());
-    dispatch(setCreatorMode(false));
-    dispatch(setStudentMode(true));
+    // dispatch(setCreatorMode(false));
+    // dispatch(setStudentMode(true));
   }
   // Reset profile dropdown upon navigating to auth pages
   useEffect(() => {

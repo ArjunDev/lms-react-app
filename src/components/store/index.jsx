@@ -5,6 +5,7 @@ import userFormDataSlice from "../pages/auth/userFormDataSlice";
 
     reducer: {
       userFormData: userFormDataSlice,
+      // allCoursesList: 
 
     }
   });

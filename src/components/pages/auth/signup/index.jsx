@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setLogIn, setUserFormData, setCreatorMode, setIsStudent } from '../userFormDataSlice';
+import { setUserFormData} from '../userFormDataSlice';
 
 const SignUp = () => {
 
@@ -32,11 +32,11 @@ const SignUp = () => {
   // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    //console.log("Form Data Submitted:", formData);
 
     //dispatching the data to global store
     dispatch(setUserFormData(formData));
-    dispatch(setLogIn());
+    //console.log(formData)
+    // dispatch(setLogIn());
 
     // Clear form
     setFormData({
@@ -44,7 +44,8 @@ const SignUp = () => {
       email: '',
       password: ''
     });
-    navigate('/home');
+    navigate('/auth/signin');
+    //navigate('/home');
   };
 
   const gotoSignInPage = (event) => {
