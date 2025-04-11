@@ -2,22 +2,25 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setMyCourses } from '../auth/userFormDataSlice';
+import allCourses from '../../store/global-courses-list';
+
 const CourseDetails = () => {
 
   const { id } = useParams(); // Extract 'id' from URL
   const [showBuyCourseModal, setShowBuyCourseModal] = useState(false);
-  const PublishedCoursesFromStore = useSelector(state => state.userFormData.publishedCourses);
-  const MyCoursesFromStore = useSelector(state=> state.userFormData.myCourses);
-  const userDataFromStore = useSelector(state => state.userFormData)
+  // const PublishedCoursesFromStore = useSelector(state => state.userFormData.publishedCourses);
+  const globalCourses = allCourses;
+  const MyCoursesFromCurrentUser = useSelector(state=> state.userFormData.currentUser.myCourses);
+  const cuurentUser = useSelector(state => state.userFormData.currentUser)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Find the selected course based on 'id'
-  const course = PublishedCoursesFromStore?.find(item => item.landingPageData.courseId === id);
+  const course = globalCourses?.find(item => item.landingPageData.courseId === id);
 
   //check whether course is already exist in user My Courses
-  const isCourseExists = MyCoursesFromStore.some(course => course.courseId === id)
+  const isCourseExists = MyCoursesFromCurrentUser.some(course => course.courseId === id)
 
   if (!course) {
     return <div className="text-center text-red-500 font-bold mt-28">Course Not Found</div>;
@@ -41,7 +44,7 @@ const CourseDetails = () => {
 
     setShowBuyCourseModal(false);
 
-    if(userDataFromStore.isLoggedIn){
+    if(cuurentUser.isLoggedIn){
       dispatch(setMyCourses({title, courseId, description, imageURl}));
       navigate('/my-courses')
     }else{

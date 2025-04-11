@@ -1,16 +1,17 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
+import allCourses from '../../store/global-courses-list';
 
 const ExploreCourses = () => {
   
-  const PublishedCoursesFromStore = useSelector(state=> state.userFormData.publishedCourses);
+  const globalCourses = allCourses;
 
   //console.log(PublishedCoursesFromStore)
   return (
     <div className='flex flex-col justify-start items-center h-full bg-gray-900 gap-4'>
       <div className='flex sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-4 mt-8'>
-      { PublishedCoursesFromStore?.map( (item, index) => 
+      { allCourses?.map( (item, index) => 
       <div 
         key={index}
         className='flex flex-col justify-center items-center bg-gray-100 p-2 rounded-2xl gap-1.5'>

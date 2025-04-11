@@ -127,10 +127,8 @@ const userFormDataSlice = createSlice({
       }
     },
     setMyCourses: (state, action) => {
-      const { email, course } = action.payload;
-      if (state.users[email]) {
-        state.users[email].myCourses.push(course);
-      }
+      const course = action.payload
+      state.currentUser.myCourses.push(course);
     },
   },
 });
