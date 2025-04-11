@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux';
 
 
 const PublishedCourses = () => {
-  const publsihedCourses = useSelector(state => state.userFormData.publishedCourses);
-  const isLoggedIn = useSelector(state => state.userFormData.isLoggedIn);
-  const isCreator = useSelector(state => state.userFormData.isCreator);
+  const currentUserPublsihedCourses = useSelector(state => state.userFormData.currentUser.publishedCourses);
+  const isLoggedIn = useSelector(state => state.userFormData.currentUser.isLoggedIn);
+  const isCreator = useSelector(state => state.userFormData.currentUser.isCreator);
   
   return (
     <div className='flex flex-col justify-center items-center h-full bg-gray-900 gap-4'>
     <div className='flex sm:flex-row flex-wrap justify-center items-start gap-5 sm:gap-5 mt-4 h-full p-4'>
-    {(isCreator && isLoggedIn && publsihedCourses.length > 0) ?publsihedCourses.map((item, index) => 
+    {(isCreator && isLoggedIn && currentUserPublsihedCourses.length > 0) ?currentUserPublsihedCourses.map((item, index) => 
       <div 
         key={index}
         className='flex flex-col justify-center items-center bg-gray-50 p-2 rounded-2xl gap-1.5'>

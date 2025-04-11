@@ -12,6 +12,7 @@ const initialState = {
     creatorMode: false,
     isLoggedIn: false,
     myCourses: [],
+    publishedCourses: [],
   },
 };
 
@@ -121,10 +122,8 @@ const userFormDataSlice = createSlice({
       state.currentUser.studentMode = action.payload;
     },
     setPublishedCourses: (state, action) => {
-      const { email, course } = action.payload;
-      if (state.users[email]) {
-        state.users[email].publishedCourses.push(course);
-      }
+      const courseData  = action.payload;
+      state.currentUser.publishedCourses.push(courseData);
     },
     setMyCourses: (state, action) => {
       const course = action.payload

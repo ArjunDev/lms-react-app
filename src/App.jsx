@@ -16,15 +16,15 @@ function App() {
   
   const location = useLocation();
   const hideMenuBar = location.pathname === "/create-new-course";
-  const userFormDataFromStore = useSelector(state => state.userFormData);
+  const currentUser = useSelector(state => state.userFormData.currentUser);
 
-  const isCreator = userFormDataFromStore.isCreator;
-  const creatorMode = userFormDataFromStore.creatorMode;
-  const isLoggedIn = userFormDataFromStore.isLoggedIn;
+  const isCreator = currentUser.isCreator;
+  const creatorMode = currentUser.creatorMode;
+  const isLoggedIn = currentUser.isLoggedIn;
 
-  useEffect(()=>{
-    // console.log("isCreator:",isCreator,"creatorMode:",creatorMode,"isLoggedIn:",isLoggedIn)
-  },[isCreator,creatorMode,isLoggedIn])
+  // useEffect(()=>{
+  //   // console.log("isCreator:",isCreator,"creatorMode:",creatorMode,"isLoggedIn:",isLoggedIn)
+  // },[isCreator,creatorMode,isLoggedIn])
   
   return (
     <div className="bg-gray-900 min-h-screen flex flex-col ">
