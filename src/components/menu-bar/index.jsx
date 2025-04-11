@@ -20,10 +20,7 @@ const MenuBar = () => {
   const creatorMode = formDataFromStore.creatorMode;
   const studentMode = formDataFromStore.studentMode;
 
-  // console.log(isLoggedIn)
-  console.log('currentUser Data:', formDataFromStore)
-
-
+  // console.log('currentUser Data:', formDataFromStore)
 
   // useEffect(() => {
   //   console.log(formDataFromStore);
