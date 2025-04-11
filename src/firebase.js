@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth'; // if you're using Auth
 import { getFirestore } from 'firebase/firestore'; // if you're using Firestore
 import { getStorage } from 'firebase/storage'; // if you're using Storage
 
-const firebaseConfig = {
+ const  firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
@@ -14,8 +14,11 @@ const firebaseConfig = {
   // measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID, // optional
 };
 
+// console.log(import.meta.env.VITE_FIREBASE_API_KEY)
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
+
+// export default firebaseConfig;
 
 // Optional: export any services you use
 const firebaseAuth = getAuth(firebaseApp);

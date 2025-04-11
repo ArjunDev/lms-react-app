@@ -2,15 +2,22 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUserFormData} from '../userFormDataSlice';
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { firebaseAuth} from '../../../../firebase';
+
+  // Initialize Firebase
+  // const app = initializeApp(firebaseConfig);
+  // Initialize Firebase Authentication
+  // const auth = getAuth(firebaseApp);
 
 const SignUp = () => {
-
   //local formdata to display UI
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: ''
   });
+  const [errorMessage, setErrorMessage] = useState("");
   const [isDisabled, setIsDisabled ] = useState(true);
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
@@ -29,24 +36,45 @@ const SignUp = () => {
     }));
   }
    
-  // Handle form submission
-  const handleSubmit = (event) => {
+  // // Handle form submission
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+
+  //   //dispatching the data to global store
+  //   dispatch(setUserFormData(formData));
+  //   //console.log(formData)
+  //   // dispatch(setLogIn());
+
+  //   // Clear form
+  //   setFormData({
+  //     name: '',
+  //     email: '',
+  //     password: ''
+  //   });
+  //   navigate('/auth/signin');
+  //   //navigate('/home');
+  // };
+
+  const handleSubmit = async(event) =>{
     event.preventDefault();
+    //local formdata
+    const { name, email, password } = formData;
+    // const auth = getAuth();
+    const auth = firebaseAuth;
 
-    //dispatching the data to global store
-    dispatch(setUserFormData(formData));
-    //console.log(formData)
-    // dispatch(setLogIn());
-
-    // Clear form
-    setFormData({
-      name: '',
-      email: '',
-      password: ''
-    });
-    navigate('/auth/signin');
-    //navigate('/home');
-  };
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // console.log("User signed up:", user);
+      
+    } catch (error) {
+      // console.error("Error signing up:", error.message);
+      // Show error message to user
+      if(error.message === "Firebase: Error (auth/email-already-in-use)."){
+        setErrorMessage("Email id already exist! Please Signin")
+      }
+    }
+  }
 
   const gotoSignInPage = (event) => {
     event.preventDefault();
@@ -110,6 +138,8 @@ const SignUp = () => {
           type='submit'
           disabled={isDisabled}
         >Submit</button>
+        <span className='text-red-600 p-1 font-medium'>{errorMessage}</span>
+
         <div className='flex justify-center items-center'>
           <span>Already have an account? </span>
           
