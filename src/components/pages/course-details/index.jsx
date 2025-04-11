@@ -53,8 +53,6 @@ const CourseDetails = () => {
     // dispatch(setIsCreator(true))// redux store action
   };
   
-
-
   return (
     <div className="flex flex-col h-[96%] p-4 sm:p-8 gap-4">
       {/* Course Header */}
