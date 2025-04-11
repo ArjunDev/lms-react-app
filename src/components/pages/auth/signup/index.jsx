@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setUserFormData} from '../userFormDataSlice';
+import { setSignUp } from '../userFormDataSlice';
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { firebaseAuth} from '../../../../firebase';
 
@@ -35,8 +35,39 @@ const SignUp = () => {
       [name]: value //dynamically updating value bassed on name, require 'name' attribute in html tag
     }));
   }
-   
-  // // Handle form submission
+
+  const handleSubmit = async(event) =>{
+    event.preventDefault();
+    //local formdata
+    const { name, email, password } = formData;
+    // const auth = getAuth();
+    const auth = firebaseAuth;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password, );
+      const user = userCredential.user;
+      const userData = { 
+              name: name, 
+              email: user.email 
+            }
+      //console.log("User signin data:", user);
+      dispatch(setSignUp(userData));
+      // Clear form
+      setFormData({
+        name: '',
+        email: '',
+        password: ''
+      });
+      navigate('/home'); // Navigate to home page
+    } catch (error) {
+      // Show error message to user
+      if(error.message === "Firebase: Error (auth/email-already-in-use)."){
+        setErrorMessage("Email id already exist! Please Sign In")
+      }
+    }
+  }
+
+ // Handle form submission
   // const handleSubmit = (event) => {
   //   event.preventDefault();
 
@@ -54,27 +85,6 @@ const SignUp = () => {
   //   navigate('/auth/signin');
   //   //navigate('/home');
   // };
-
-  const handleSubmit = async(event) =>{
-    event.preventDefault();
-    //local formdata
-    const { name, email, password } = formData;
-    // const auth = getAuth();
-    const auth = firebaseAuth;
-
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      // console.log("User signed up:", user);
-      
-    } catch (error) {
-      // console.error("Error signing up:", error.message);
-      // Show error message to user
-      if(error.message === "Firebase: Error (auth/email-already-in-use)."){
-        setErrorMessage("Email id already exist! Please Signin")
-      }
-    }
-  }
 
   const gotoSignInPage = (event) => {
     event.preventDefault();

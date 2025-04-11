@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import allCourses from '../../store/global-courses-list';
 
 const Home = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const globalCourses = allCourses;
+  const currentUser = useSelector(state=> state.userFormData.currentUser)
 
   //console.log(globalCourses);
   const images = globalCourses?.map((item) => item.settingsData.imageURL);
@@ -23,6 +24,10 @@ const Home = () => {
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
   };
+
+  // useEffect(()=>{
+  //   console.log("currentUser:", currentUser);
+  // })
 
   return (
     <div className='flex flex-col justify-center items-center p-4 py-8 gap-6 h-full w-full sm:p-16'>

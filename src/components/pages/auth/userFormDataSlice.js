@@ -5,7 +5,7 @@ const initialState = {
   currentUser: {  
     name: "",
     email: "",
-    password: "",
+    // password: "",
     isStudent: true,
     studentMode: true,
     isCreator: false,
@@ -19,12 +19,14 @@ const initialState = {
 const defaultUserData = {
   name: "",
   email: "",
-  password: "",
+  // password: "",
   isStudent: true,
   studentMode: true,
   isCreator: false,
   creatorMode: false,
   isLoggedIn: false,
+  myCourses: [],
+  publishedCourses: [],
   // publishedCourses: [
   //   {
   //     curriculumData: [{ id: '1', name: 'lecture-1' }, { id: '2', name: 'lecture-2' }],
@@ -70,21 +72,19 @@ const userFormDataSlice = createSlice({
   name: 'userFormData',
   initialState,
   reducers: {
-    setUserFormData: (state, action) => {
-      const { email } = action.payload;
-      if (!state.users[email]) {
-        state.users[email] = { ...defaultUserData, ...action.payload };
-      } else {
-        state.users[email] = { ...state.users[email], ...action.payload };
-      }
+    setSignUp: (state, action) => {
+      state.currentUser = { ...defaultUserData, isLoggedIn: true, ...action.payload };
     },
+    // setUserFormData: (state, action) => {
+    //   const { email } = action.payload;
+    //   if (!state.users[email]) {
+    //     state.users[email] = { ...defaultUserData, ...action.payload };
+    //   } else {
+    //     state.users[email] = { ...state.users[email], ...action.payload };
+    //   }
+    // },
     setLogIn: (state, action) => {
-      const { email } = action.payload;
-      if (state.users[email]) {
-        state.users[email].isLoggedIn = true;//to update 
-
-        state.currentUser = {...state.currentUser, isLoggedIn: true }
-      }
+        state.currentUser = { ...defaultUserData, isLoggedIn: true, ...action.payload }
     },
     // setCurrentUser: (state, action) =>{
     //   state.currentUser = {...action.payload };
@@ -133,7 +133,7 @@ const userFormDataSlice = createSlice({
 });
 
 export const {
-  setUserFormData,
+  setSignUp,
   setLogIn,
   // setCurrentUser,
   setLogOut,

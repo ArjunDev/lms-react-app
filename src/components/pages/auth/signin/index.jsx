@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setLogIn } from '../userFormDataSlice';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseAuth, firebaseDb } from '../../../../firebase';
+import { doc, setDoc } from "firebase/firestore";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -10,10 +13,11 @@ const SignIn = () => {
   });
 
   const [isDisabled, setIsDisabled] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const usersDataFromStore = useSelector((state) => state.userFormData.users);
+  // const usersDataFromStore = useSelector((state) => state.userFormData.users);
 
   useEffect(() => {
     setIsDisabled(!(formData.email && formData.password));
@@ -27,29 +31,62 @@ const SignIn = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    const email = formData.email.toLowerCase(); // Normalize for comparison
-    const password = formData.password;
-    const storeUser = usersDataFromStore[email];
+    const auth = firebaseAuth;
+    const { email, password } = formData;
 
-    // console.log('Trying to log in with email:', email);
-    // console.log('User found in store:', storeUser);
-    if (!storeUser) {
-      alert('User not found. Please check your email.');
-      return;
-    }
-    const { email: storeEmail, password: storePassword } = storeUser;
-
-    if (storeEmail === email && storePassword === password) {
-      dispatch(setLogIn({ email }));
-      // dispatch(setCurrentUser(storeUser))
+    try{
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      // console.log("auth success:", userCredential.user)
+      //
+      try{
+        const upload = await setDoc(doc(firebaseDb, "cities", "LA"), {
+          name: "Los Angeles",
+          state: "CA",
+          country: "USA"
+        });
+        console.log("upload success:")
+      }catch(error){
+        console.log("upload failed:", error.message)
+      }
+    
+      //
+      dispatch(setLogIn(formData));
       navigate('/home');
       setFormData({ email: '', password: '' });
-    } else {
-      alert('Authentication failed! Please enter the correct Password');
+    }catch(error){
+      // console.log("auth failed:", error.message )
+      if(error.message === "Firebase: Error (auth/invalid-credential).")
+      setErrorMessage("Invalid credential");
     }
-  };
+
+  }
+
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+
+  //   const email = formData.email.toLowerCase(); // Normalize for comparison
+  //   const password = formData.password;
+  //   const storeUser = usersDataFromStore[email];
+
+  //   // console.log('Trying to log in with email:', email);
+  //   // console.log('User found in store:', storeUser);
+  //   if (!storeUser) {
+  //     alert('User not found. Please check your email.');
+  //     return;
+  //   }
+  //   const { email: storeEmail, password: storePassword } = storeUser;
+
+  //   if (storeEmail === email && storePassword === password) {
+  //     dispatch(setLogIn({ email }));
+  //     // dispatch(setCurrentUser(storeUser))
+  //     navigate('/home');
+  //     setFormData({ email: '', password: '' });
+  //   } else {
+  //     alert('Authentication failed! Please enter the correct Password');
+  //   }
+  // };
 
   const gotoSignUpPage = (event) => {
     event.preventDefault();
@@ -103,11 +140,11 @@ const SignIn = () => {
             }`}
             type='submit'
             disabled={isDisabled}
-          >
-            Submit
-          </button>
+          >Submit</button>
 
-          <div className='flex justify-center items-center mt-2 mb-2'>
+          <span className='text-red-600 px-1 font-medium'>{errorMessage}</span>
+
+          <div className='flex justify-center items-center mb-2'>
             <span>Don't have an account?</span>
             <button
               onClick={gotoSignUpPage}
