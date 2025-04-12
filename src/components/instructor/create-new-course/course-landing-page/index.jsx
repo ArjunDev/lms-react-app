@@ -33,16 +33,17 @@ const CourseLandingPage = ({setLandingPageData}) => {
 
   return (
     <div 
-      className="p-4 flex flex-col gap-4 font-small border rounded mt-4 w-max sm:w-[60%] sm:px-8 sm:ml-8">
-        <span className='font-medium'>Course Landing Page Details:</span>
+      className="p-4 flex flex-col justify-center items-center gap-4 border rounded w-max sm:flex-col sm:w-max bg-gray-100 font-medium">
+        <span className='font-bold'>Course Landing Page Details:</span>
+      <div className='w-full'>
       <form 
         onSubmit={handleLandingPageFormData}
-        className="flex flex-col gap-3 mt-1"
+        className="flex flex-col justify-center items-start gap-3 mt-1 sm:px-12"
       >
         <label>Title:
           <input 
             name="title"
-            className="border rounded px-2 ml-2 bg-gray-50 sm:w-[60%]"
+            className="border rounded px-2 ml-2 bg-gray-50 sm:w-max"
             placeholder="Enter the title"
             type="text"
             value={formData.title}
@@ -52,7 +53,7 @@ const CourseLandingPage = ({setLandingPageData}) => {
         <label>Description:
           <input 
             name="description"
-            className="border rounded px-2 ml-2 bg-gray-50 sm:w-[60%]"
+            className="border rounded px-2 ml-2 bg-gray-50 sm:w-max"
             placeholder="Enter the description"
             type="text"
             value={formData.description}
@@ -93,6 +94,7 @@ const CourseLandingPage = ({setLandingPageData}) => {
             <option value="3">Advanced</option>
           </select>
         </label>
+        <div className='flex justify-center items-center w-full'>
         <button 
           disabled={isDisabled}
           type="submit"
@@ -100,7 +102,10 @@ const CourseLandingPage = ({setLandingPageData}) => {
             isDisabled ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-800 hover:bg-gray-700 cursor-pointer'
           }`}
         >Save</button>
+        </div>
       </form>
+      </div>
+
     </div>
   );
 };

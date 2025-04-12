@@ -42,46 +42,47 @@ const CreateNewCourse = () => {
   //console.log(curriculumData, landingPageData, settingsData)
 
   return (
-    <div className="flex flex-col justify-start items-start h-screen bg-gray-100 gap-2">
-      <div className="flex justify-between items-center bg-gray-900 p-4 sm:p-6 w-full shadow-lg text-gray-50">
+    <div className="flex flex-col justify-start items-start min-h-full bg-gray-900 gap-2">
+      <div className="flex justify-between items-center bg-gray-900 p-4 sm:p-6 w-full h-max text-gray-50 shadow-lg">
         <div className="flex justify-center items-center font-bold">
           <span>Course Creation</span>
         </div>
         <div className="flex gap-4">
           <button 
             onClick={handleCancelBtn}
-            className="bg-gray-700 text-gray-50 px-3 font-medium py-1 cursor-pointer rounded hover:bg-gray-700 transition"
+            className="bg-gray-700 text-gray-50 px-3 font-medium py-1 cursor-pointer rounded hover:bg-gray-800 transition"
           >Cancel</button>
           <button 
+            disabled={isDisabled}
             onClick={handlePublishBtn}
-            className={`text-gray-50 font-medium px-3 py-1 rounded transition ${isDisabled ? 'bg-gray-400 cursor-not-allowed' :'bg-gray-700 cursor-pointer' }`}
+            className={`text-gray-50 font-medium px-3 py-1 rounded transition ${isDisabled ? 'bg-gray-400 cursor-not-allowed' :'bg-gray-700 cursor-pointer hover:bg-gray-800' }`}
           >Publish</button>
         </div>
       </div>
-      <div className='flex flex-col justify-start items-start p-4 w-full h-full rounded'>
+      <div className='flex flex-col justify-start items-center p-4 w-full h-max'>
         {/* Dynamically generating tabs */}
-        <div className='flex gap-2 justify-center items-center p-2 rounded bg-gray-400 shadow-md'>
+        <div className='flex gap-2 justify-center items-center p-2 rounded bg-gray-900 px-4 shadow-md w-max font-bold'>
           {["Curriculum", "Landing Page", "Settings"].map((tab) => (
             <button
               key={tab}
               className={`p-1 px-2 rounded cursor-pointer ${
                 activeTab === tab
                   ? "bg-gray-50 text-blue-600 font-bold"
-                  : "bg-gray-100 font-small"
+                  : "bg-gray-100"
               }`}
               onClick={() => handleActiveTab(tab)}
             >{tab}</button>))
           }
         </div>
-        {activeTab === 'Curriculum' && <div className='w-full h-full shadow-md m-auto mt-2'>
+        {activeTab === 'Curriculum' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap container items-start w-max h-full mt-2 p-2'>
         <Curriculum 
           setCurriculumData={setCurriculumData}/>
         </div>}
-        {activeTab === 'Landing Page' && <div className='w-full h-full shadow-md m-auto mt-2'>
+        {activeTab === 'Landing Page' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap items-center w-full h-full mt-2 p-2'>
           <CourseLandingPage 
            setLandingPageData={setLandingPageData} />
         </div>}
-        {activeTab === 'Settings' && <div className='w-full h-full shadow-md m-auto mt-2'>
+        {activeTab === 'Settings' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap items-center w-max h-full mt-2 p-2'>
           <CourseSettings
            setSettingsData={setSettingsData} />
         </div>}

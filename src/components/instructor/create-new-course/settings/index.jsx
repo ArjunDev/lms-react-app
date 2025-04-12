@@ -23,15 +23,15 @@ const CourseSettings = ({setSettingsData}) => {
   },[preview])
 
   return (
-    <div className="flex-col flex p-4 items-start justify-center">
+    <div className="flex-col flex p-4 items-center justify-center bg-gray-100 rounded w-max">
       <span className="font-bold mb-4 w-max">Course Thumbnail:</span>
       {preview && <img 
         src={preview} 
         alt="Preview"
-        className='flex justify-center items-center h-30 w-60 border rounded overflow-hidden' />
+        className='flex justify-center items-center h-30 w-60 border rounded overflow-hidden'/>
       }
       <div 
-        className="font-medium flex gap-2 flex-wrap justify-start items-center p-4">
+        className="font-medium flex gap-2 flex-wrap justify-center items-center p-4">
         <input 
           className='border cursor-pointer rounded px-1 w-[70%]'
           type="file" 
