@@ -3,21 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setLogIn } from '../userFormDataSlice';
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth, firebaseDb } from '../../../../firebase';
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import { firebaseAuth, firebaseFirestoreDb } from '../../../../firebase';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-
   const [isDisabled, setIsDisabled] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading ] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // const usersDataFromStore = useSelector((state) => state.userFormData.users);
 
   useEffect(() => {
     setIsDisabled(!(formData.email && formData.password));
@@ -34,60 +32,35 @@ const SignIn = () => {
   const handleSubmit = async(event) => {
     event.preventDefault();
     const auth = firebaseAuth;
-    const { email, password } = formData;
+    const db = firebaseFirestoreDb;
 
+    const { email, password } = formData;
+    setLoading(true);
     try{
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      // console.log("auth success:", userCredential.user)
-      //
-      try{
-        const upload = await setDoc(doc(firebaseDb, "cities", "LA"), {
-          name: "Los Angeles",
-          state: "CA",
-          country: "USA"
-        });
-        console.log("upload success:")
-      }catch(error){
-        console.log("upload failed:", error.message)
+      const userDataFromDb = await getDoc(doc(db, "users", email));
+
+      if(userDataFromDb.exists()){
+          const userData = userDataFromDb.data();
+
+          dispatch(setLogIn(userData));
+          setFormData({ email: '', password: '' });
+          setLoading(false);
+          navigate('/home');
+        // console.log("User data:", userDataFromDb.data());
+      } else {
+        console.log("User data not found!");
       }
-    
-      //
-      dispatch(setLogIn(formData));
-      navigate('/home');
-      setFormData({ email: '', password: '' });
+      // console.log("userDataFromDb:", userDataFromDb)
     }catch(error){
       // console.log("auth failed:", error.message )
-      if(error.message === "Firebase: Error (auth/invalid-credential).")
-      setErrorMessage("Invalid credential");
+      setLoading(false);
+      console.log(error.code, error.message)
+      if(error.message === "Firebase: Error (auth/invalid-credential)."){
+        setErrorMessage("Invalid credential");
+      }
     }
-
   }
-
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-
-  //   const email = formData.email.toLowerCase(); // Normalize for comparison
-  //   const password = formData.password;
-  //   const storeUser = usersDataFromStore[email];
-
-  //   // console.log('Trying to log in with email:', email);
-  //   // console.log('User found in store:', storeUser);
-  //   if (!storeUser) {
-  //     alert('User not found. Please check your email.');
-  //     return;
-  //   }
-  //   const { email: storeEmail, password: storePassword } = storeUser;
-
-  //   if (storeEmail === email && storePassword === password) {
-  //     dispatch(setLogIn({ email }));
-  //     // dispatch(setCurrentUser(storeUser))
-  //     navigate('/home');
-  //     setFormData({ email: '', password: '' });
-  //   } else {
-  //     alert('Authentication failed! Please enter the correct Password');
-  //   }
-  // };
-
   const gotoSignUpPage = (event) => {
     event.preventDefault();
     navigate('/auth/signup');
@@ -140,7 +113,7 @@ const SignIn = () => {
             }`}
             type='submit'
             disabled={isDisabled}
-          >Submit</button>
+          >{loading ? "Submitting..." : "Submit"}</button>
 
           <span className='text-red-600 px-1 font-medium'>{errorMessage}</span>
 

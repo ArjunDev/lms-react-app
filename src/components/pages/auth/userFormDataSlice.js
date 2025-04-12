@@ -5,7 +5,6 @@ const initialState = {
   currentUser: {  
     name: "",
     email: "",
-    // password: "",
     isStudent: true,
     studentMode: true,
     isCreator: false,
@@ -19,7 +18,6 @@ const initialState = {
 const defaultUserData = {
   name: "",
   email: "",
-  // password: "",
   isStudent: true,
   studentMode: true,
   isCreator: false,
@@ -27,45 +25,6 @@ const defaultUserData = {
   isLoggedIn: false,
   myCourses: [],
   publishedCourses: [],
-  // publishedCourses: [
-  //   {
-  //     curriculumData: [{ id: '1', name: 'lecture-1' }, { id: '2', name: 'lecture-2' }],
-  //     landingPageData: {
-  //       courseId: '1234',
-  //       description: 'Tailwind CSS is a utility-first CSS framework...',
-  //       level: '1',
-  //       price: '20',
-  //       primaryLanguage: 'English',
-  //       title: 'Fundamentals of Tailwincss'
-  //     },
-  //     settingsData: { imageURL: '/lms-react-app/images/tailwindcss.webp' }
-  //   },
-  //   {
-  //     curriculumData: [{ id: '2', name: 'lecture-1' }],
-  //     landingPageData: {
-  //       courseId: '12345',
-  //       description: 'React.js is a JavaScript library...',
-  //       level: '1',
-  //       price: '30',
-  //       primaryLanguage: 'English',
-  //       title: 'Basics of React JS'
-  //     },
-  //     settingsData: { imageURL: '/lms-react-app/images/reactjs.webp' }
-  //   },
-  //   {
-  //     curriculumData: [{ id: '3', name: 'lecture-1' }, { id: '3', name: 'lecture-2' }],
-  //     landingPageData: {
-  //       courseId: '123456',
-  //       description: 'JavaScript (JS) is a versatile...',
-  //       level: '1',
-  //       price: '10',
-  //       primaryLanguage: 'English',
-  //       title: 'Fundamentals of JavaScript'
-  //     },
-  //     settingsData: { imageURL: '/lms-react-app/images/javascript.webp' }
-  //   }
-  // ],
-  myCourses: [],
 };
 
 const userFormDataSlice = createSlice({
@@ -73,29 +32,14 @@ const userFormDataSlice = createSlice({
   initialState,
   reducers: {
     setSignUp: (state, action) => {
-      state.currentUser = { ...defaultUserData, isLoggedIn: true, ...action.payload };
+      // state.currentUser = { ...defaultUserData, isLoggedIn: true, ...action.payload };
+      state.currentUser = { ...action.payload };
     },
-    // setUserFormData: (state, action) => {
-    //   const { email } = action.payload;
-    //   if (!state.users[email]) {
-    //     state.users[email] = { ...defaultUserData, ...action.payload };
-    //   } else {
-    //     state.users[email] = { ...state.users[email], ...action.payload };
-    //   }
-    // },
     setLogIn: (state, action) => {
-        state.currentUser = { ...defaultUserData, isLoggedIn: true, ...action.payload }
+        state.currentUser = { ...action.payload }
     },
-    // setCurrentUser: (state, action) =>{
-    //   state.currentUser = {...action.payload };
-    // },
     setLogOut: (state, action) => {
-      // // const { email } = action.payload;
-      // // if (state.users[email]) {
-      //   state.currentUser = {...state.defaultUserData, isLoggedIn: false, studentMode: true, creatorMode: false }
-      // // }
       state.currentUser = {...defaultUserData}
-
     },
     setIsStudent: (state, action) => {
       const { email, value } = action.payload;
@@ -135,7 +79,6 @@ const userFormDataSlice = createSlice({
 export const {
   setSignUp,
   setLogIn,
-  // setCurrentUser,
   setLogOut,
   setPublishedCourses,
   setIsStudent,

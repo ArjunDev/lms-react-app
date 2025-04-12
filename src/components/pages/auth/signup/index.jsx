@@ -3,12 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSignUp } from '../userFormDataSlice';
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import { firebaseAuth} from '../../../../firebase';
-
-  // Initialize Firebase
-  // const app = initializeApp(firebaseConfig);
-  // Initialize Firebase Authentication
-  // const auth = getAuth(firebaseApp);
+import { setDoc, doc } from "firebase/firestore"
+import { firebaseAuth, firebaseFirestoreDb } from '../../../../firebase';
 
 const SignUp = () => {
   //local formdata to display UI
@@ -19,6 +15,7 @@ const SignUp = () => {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [isDisabled, setIsDisabled ] = useState(true);
+  const [loading, setLoading ] = useState(false);
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
   
@@ -36,55 +33,56 @@ const SignUp = () => {
     }));
   }
 
+  const defaultUserData = {
+    name: "",
+    email: "",
+    // password: "",
+    isStudent: true,
+    studentMode: true,
+    isCreator: false,
+    creatorMode: false,
+    isLoggedIn: true,
+    myCourses: [],
+    publishedCourses: [],
+  };
+
   const handleSubmit = async(event) =>{
     event.preventDefault();
     //local formdata
     const { name, email, password } = formData;
-    // const auth = getAuth();
     const auth = firebaseAuth;
-
+    const db = firebaseFirestoreDb;
+    const userData = { 
+      name: name, 
+      email: email 
+    }
+    const data = {...defaultUserData, ...userData}
+    setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password, );
-      const user = userCredential.user;
-      const userData = { 
-              name: name, 
-              email: user.email 
-            }
-      //console.log("User signin data:", user);
-      dispatch(setSignUp(userData));
+      const userEmail = userCredential.user.email;
+
+      //to add new user data to db collection "users"  
+      const userDataFromFirestore = await setDoc(doc(db, "users", userEmail), data); 
+
+      dispatch(setSignUp(data));
       // Clear form
       setFormData({
         name: '',
         email: '',
         password: ''
       });
+      setLoading(false);
       navigate('/home'); // Navigate to home page
     } catch (error) {
       // Show error message to user
-      if(error.message === "Firebase: Error (auth/email-already-in-use)."){
-        setErrorMessage("Email id already exist! Please Sign In")
-      }
+        setLoading(false);
+        console.log(error);
+        if(error.message === "Firebase: Error (auth/email-already-in-use)."){
+          setErrorMessage("Email id already exist! Please Sign In")
+        }
     }
   }
-
- // Handle form submission
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-
-  //   //dispatching the data to global store
-  //   dispatch(setUserFormData(formData));
-  //   //console.log(formData)
-  //   // dispatch(setLogIn());
-
-  //   // Clear form
-  //   setFormData({
-  //     name: '',
-  //     email: '',
-  //     password: ''
-  //   });
-  //   navigate('/auth/signin');
-  //   //navigate('/home');
-  // };
 
   const gotoSignInPage = (event) => {
     event.preventDefault();
@@ -147,8 +145,10 @@ const SignUp = () => {
           }`}
           type='submit'
           disabled={isDisabled}
-        >Submit</button>
-        <span className='text-red-600 p-1 font-medium'>{errorMessage}</span>
+        >{loading ? "Submitting..." : "Submit"}</button>
+        <span 
+          className='text-red-600 p-1 font-medium'
+        >{errorMessage}</span>
 
         <div className='flex justify-center items-center'>
           <span>Already have an account? </span>
