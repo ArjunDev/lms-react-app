@@ -70,8 +70,9 @@ const userFormDataSlice = createSlice({
       state.currentUser.publishedCourses.push(courseData);
     },
     setMyCourses: (state, action) => {
-      const course = action.payload
-      state.currentUser.myCourses.push(course);
+      // const course = action.payload;
+      // state.currentUser.myCourses.push(course);
+      state.currentUser.myCourses = action.payload;
     },
   },
 });

@@ -5,20 +5,20 @@ import { setLogOut, setCreatorMode, setStudentMode, setIsCreator } from '../page
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { firebaseFirestoreDb } from '../../firebase';
 
 const MenuBar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
   const [profileActive, setProfileActive] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(false);
   const [showBecomCreatorModal, setShowBecomCreatorModal] = useState(false);
   const [isCreatorModeToggled, setIsCreatorModeToggled] = useState(false);
-
   const formDataFromStore = useSelector(state => state.userFormData.currentUser);
-  const isLoggedIn = formDataFromStore.isLoggedIn;
-  const isCreator = formDataFromStore.isCreator;
-  const creatorMode = formDataFromStore.creatorMode;
-  const studentMode = formDataFromStore.studentMode;
+  const { isLoggedIn, isCreator, creatorMode, studentMode, email } = formDataFromStore;
 
   // console.log('currentUser Data:', formDataFromStore)
 
@@ -63,9 +63,29 @@ const MenuBar = () => {
     setShowBecomCreatorModal(false);
   };
 
-  const handleYes = () => {
-    setShowBecomCreatorModal(false);
-    dispatch(setIsCreator(true))// redux store action
+  const handleYes = async() => {
+
+    setProcessing(true);
+    const db = firebaseFirestoreDb;
+
+    try{
+      const updateUserDbData = await updateDoc(doc(db, "users", email), {isCreator: true})//update only iscreater.
+
+      const docRef = doc(db, "users", email); //Create ref to the document
+      const docSnap = await getDoc(docRef);   // Fetch the document
+
+      if(docSnap.exists()){
+        const userDbData = docSnap.data();   // Extract data
+        // console.log("userDbData:", userDbData);
+      }
+      setProcessing(false);
+      setShowBecomCreatorModal(false);
+      dispatch(setIsCreator(true))// redux store action
+    }catch(error){
+      setProcessing(false);
+      setErrorMsg(true)
+      // console.log(error.code, error.message);
+    }
   };
   
   return (
@@ -122,16 +142,20 @@ const MenuBar = () => {
         )}
         {/* Modal */}
         {showBecomCreatorModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm p-4">
-          <div className="bg-white p-2 py-6 rounded shadow-lg text-center sm:p-6">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-lg p-4">
+          { processing ? <div className="bg-white px-4 py-6 rounded-2xl shadow-2xl text-center sm:p-6">
+            <p className="text-lg font-semibold">Are you sure you want to become a creator?</p>
+            <p className="text-lg text-green-500 font-bold py-4">Peocessing...</p></div> : 
+            <div className="bg-white px-4 py-6 rounded-2xl shadow-2xl text-center sm:p-6">
             <p className="text-lg font-semibold">Are you sure you want to become a creator?</p>
             <div className="mt-4 flex justify-center gap-4">
               <button onClick={handleYes} className="px-4 py-2 bg-green-500 text-white rounded cursor-pointer">Yes</button>
               <button onClick={handleClose} className="px-4 py-2 bg-red-500 text-white rounded cursor-pointer">No</button>
             </div>
-          </div>
-        </div>
-        )}
+            {errorMsg ? <span className='text-red-500 p-1 font-medium'>oops! something went wrong. try again</span> : "" }
+            </div>
+          }
+        </div>)}
         {(isLoggedIn && isCreator) && (
           <button 
             onClick={handleCreatorMode}
@@ -143,10 +167,10 @@ const MenuBar = () => {
           {isLoggedIn ? (
             <button 
               onClick={handleSignOut}
-              className='flex justify-center items-center'
+              className='flex justify-center items-center cursor-pointer'
             >Sign Out</button>
           ) : (
-            <NavLink to={'/auth/signin'} className='flex justify-center items-center'>Sign In</NavLink>
+            <NavLink to={'/auth/signin'} className='flex justify-center items-center cursor-pointer'>Sign In</NavLink>
           )}
         </div>
       </div>
