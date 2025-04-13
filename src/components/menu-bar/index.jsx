@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import ChangeProfilePicture from './ChangeProfilePicture';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLogOut, setCreatorMode, setStudentMode, setIsCreator } from '../pages/auth/userFormDataSlice';
+import { setLogOut, setCreatorMode, setStudentMode, setIsCreator, setProfilePicture } from '../pages/auth/userFormDataSlice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
@@ -11,21 +12,16 @@ import { firebaseFirestoreDb } from '../../firebase';
 const MenuBar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-
   const [profileActive, setProfileActive] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
+  const [showUploader, setShowUploader] = useState(false);
   const [showBecomCreatorModal, setShowBecomCreatorModal] = useState(false);
   const [isCreatorModeToggled, setIsCreatorModeToggled] = useState(false);
   const formDataFromStore = useSelector(state => state.userFormData.currentUser);
-  const { isLoggedIn, isCreator, creatorMode, studentMode, email } = formDataFromStore;
+  const { isLoggedIn, isCreator, creatorMode, studentMode, email, profilePicture } = formDataFromStore;
 
-  // console.log('currentUser Data:', formDataFromStore)
-
-  // useEffect(() => {
-  //   console.log(formDataFromStore);
-  // }, [formDataFromStore]);
-
+  // console.log(profilePicture);
   const handleSignOut = () => {
     setIsCreatorModeToggled(false);//local state
     dispatch(setLogOut());
@@ -87,7 +83,7 @@ const MenuBar = () => {
       // console.log(error.code, error.message);
     }
   };
-  
+
   return (
     <>
     <div 
@@ -123,17 +119,46 @@ const MenuBar = () => {
           className={({ isActive }) => isActive ? "text-blue-600 font-medium bg-gray-50 p-1 px-3 rounded-2xl transition-all" : "text-gray-300 font-medium p-1 px-3"}
           >Publised Courses</NavLink> 
         }
-         <span 
-         onClick={handleProfileButton}
-          className={ profileActive ? "text-blue-600 font-medium cursor-pointer" : "text-gray-300 cursor-pointer font-medium" }
-          ><AccountCircleIcon fontSize="medium" /></span>
+        {/* Profile change logic */}
+        <span 
+          onClick={handleProfileButton}
+          className={
+            profileActive 
+              ? "text-blue-600 font-medium cursor-pointer" 
+              : "text-gray-300 cursor-pointer font-medium"
+          }
+        >
+        {profilePicture ? (
+          <img 
+            src={profilePicture} 
+            alt="Profile" 
+            className={`w-8 h-8 rounded-full object-cover border-2 ${
+              profileActive ? 'border-blue-600' : 'border-green-300'
+            }`}
+          />) : (
+            <AccountCircleIcon fontSize="medium" />)}
+        </span>
       </div>
     </div>
-    {profileActive ? <div className='flex justify-center items-center w-max absolute bg-gray-800 right-2 top-17 rounded z-50'>
+    {profileActive ? <div className='flex justify-center items-center w-max absolute bg-gray-800 right-2 top-17 rounded z-50 shadow-lg'>
       <div className='flex flex-col justify-center items-center gap-2 h-auto w-auto p-2'>
-        <button 
-          className='p-1 px-2 rounded cursor-pointer w-full transition-all duration-300 text-gray-300 hover:bg-gray-200 hover:text-gray-900'
-        >Change Profile</button>
+        {isLoggedIn && (
+          <div>
+            <button
+              onClick={() => setShowUploader((prev) => !prev)}
+              className='flex p-1 px-2 rounded cursor-pointer w-full transition-all duration-300 text-gray-300 hover:bg-gray-200 hover:text-gray-900'
+            >Change Profile</button>
+            {showUploader && (
+              <ChangeProfilePicture
+                onUpload={(url) => {
+                  dispatch(setProfilePicture(url))
+                // console.log("Received URL:", url);
+                  setShowUploader(false);
+                }}
+                close={() => setShowUploader(false)}
+              />)}
+          </div>)
+        }
         {(!isCreator && isLoggedIn) && (
           <button 
             onClick={handleBecomeCreatorBtn}

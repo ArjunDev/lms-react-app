@@ -10,6 +10,7 @@ const initialState = {
     isCreator: false,
     creatorMode: false,
     isLoggedIn: false,
+    profilePicture: "",
     myCourses: [],
     publishedCourses: [],
   },
@@ -23,6 +24,7 @@ const defaultUserData = {
   isCreator: false,
   creatorMode: false,
   isLoggedIn: false,
+  profilePicture: "",
   myCourses: [],
   publishedCourses: [],
 };
@@ -58,6 +60,9 @@ const userFormDataSlice = createSlice({
     setCreatorMode: (state, action) => {
       state.currentUser.creatorMode = action.payload;
     },
+    setProfilePicture: (state, action) => {
+      state.currentUser.profilePicture = action.payload;
+    },
     setStudentMode: (state, action) => {
       // const { email, value } = action.payload;
       // if (state.users[email]) {
@@ -87,6 +92,7 @@ export const {
   setCreatorMode,
   setStudentMode,
   setMyCourses,
+  setProfilePicture,
 } = userFormDataSlice.actions;
 
 export default userFormDataSlice.reducer;
