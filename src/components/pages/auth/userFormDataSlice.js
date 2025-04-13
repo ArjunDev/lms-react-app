@@ -13,6 +13,7 @@ const initialState = {
     profilePicture: "",
     myCourses: [],
     publishedCourses: [],
+    // globalCourses: [],
   },
 };
 
@@ -27,6 +28,7 @@ const defaultUserData = {
   profilePicture: "",
   myCourses: [],
   publishedCourses: [],
+  // globalCourses: [],
 };
 
 const userFormDataSlice = createSlice({
@@ -74,6 +76,10 @@ const userFormDataSlice = createSlice({
       const courseData  = action.payload;
       state.currentUser.publishedCourses.push(courseData);
     },
+    // setGlobalCourses: (state, action) => {
+    //   const courseData  = action.payload;
+    //   state.currentUser.globalCourses = courseData;
+    // },
     setMyCourses: (state, action) => {
       // const course = action.payload;
       // state.currentUser.myCourses.push(course);
@@ -93,6 +99,7 @@ export const {
   setStudentMode,
   setMyCourses,
   setProfilePicture,
+  // setGlobalCourses,
 } = userFormDataSlice.actions;
 
 export default userFormDataSlice.reducer;

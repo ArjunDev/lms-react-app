@@ -105,7 +105,6 @@ const CourseLandingPage = ({setLandingPageData}) => {
         </div>
       </form>
       </div>
-
     </div>
   );
 };

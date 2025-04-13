@@ -25,9 +25,9 @@ const Home = () => {
     );
   };
 
-  useEffect(()=>{
-    console.log("currentUser:", currentUser);
-  })
+  // useEffect(()=>{
+  //   console.log("currentUser:", currentUser);
+  // })
 
   return (
     <div className='flex flex-col justify-center items-center p-4 py-8 gap-6 h-full w-full sm:p-16'>

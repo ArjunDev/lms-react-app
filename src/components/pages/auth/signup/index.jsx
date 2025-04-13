@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSignUp } from '../userFormDataSlice';
 import { createUserWithEmailAndPassword } from "firebase/auth"
@@ -32,19 +32,22 @@ const SignUp = () => {
       [name]: value //dynamically updating value bassed on name, require 'name' attribute in html tag
     }));
   }
+  const defaultUserData = useSelector(state=> state.userFormData.currentUser);
 
-  const defaultUserData = {
-    name: "",
-    email: "",
-    // password: "",
-    isStudent: true,
-    studentMode: true,
-    isCreator: false,
-    creatorMode: false,
-    isLoggedIn: true,
-    myCourses: [],
-    publishedCourses: [],
-  };
+  // console.log("defaultUsers:", defaultUserData)
+
+  // const defaultUserData = {
+  //   name: "",
+  //   email: "",
+  //   // password: "",
+  //   isStudent: true,
+  //   studentMode: true,
+  //   isCreator: false,
+  //   creatorMode: false,
+  //   isLoggedIn: true,
+  //   myCourses: [],
+  //   publishedCourses: [],
+  // };
 
   const handleSubmit = async(event) =>{
     event.preventDefault();
@@ -56,7 +59,7 @@ const SignUp = () => {
       name: name, 
       email: email 
     }
-    const data = {...defaultUserData, ...userData}
+    const data = {...defaultUserData, isLoggedIn: true, ...userData}
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password, );

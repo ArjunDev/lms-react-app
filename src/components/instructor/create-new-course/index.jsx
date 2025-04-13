@@ -3,16 +3,23 @@ import Curriculum from './curriculum';
 import { useNavigate } from 'react-router-dom';
 import CourseLandingPage from './course-landing-page';
 import CourseSettings from './settings';
-import { useDispatch } from 'react-redux';
-import { setPublishedCourses } from '../../pages/auth/userFormDataSlice'
+import { useDispatch, useSelector } from 'react-redux';
+import { setPublishedCourses } from '../../pages/auth/userFormDataSlice';
+import { setGlobalCourses, addGlobalCourse } from '../../store/globalCoursesSlice';
+import {doc, updateDoc, arrayUnion} from "firebase/firestore";
+import { firebaseFirestoreDb } from '../../../firebase';
 
 const CreateNewCourse = () => {
 
-  const [isDisabled, setIsDisabled] = useState(true)
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [publishing, setPublishing] = useState(false);
   const [activeTab, setActiveTab] = useState("Curriculum");
   const [ curriculumData, setCurriculumData ] = useState([]);
   const [ landingPageData, setLandingPageData ] = useState({});
-  const [ settingsData, setSettingsData ] = useState({});
+  const [ thumbnailData, setThumbnailData ] = useState({});
+  const email = useSelector(state=> state.userFormData.currentUser.email);
+  const currentUser = useSelector(state=> state.userFormData.currentUser);
+
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
 
@@ -24,20 +31,49 @@ const CreateNewCourse = () => {
     setActiveTab(tabName);
   };
 
-  const handlePublishBtn = () => {
-    const courseData = {curriculumData, landingPageData, settingsData}
-    dispatch(setPublishedCourses(courseData));
-    navigate('/published-courses')
-  }
+  const handlePublishBtn = async () => {
+
+    setPublishing(true);
+    thumbnailData.append("upload_preset", "unsigned_upload"); //your unsigned preset
+    try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/dtpaoymjq/upload",
+        {
+          method: "POST",
+          body: thumbnailData,
+        }
+      );
+      const data = await res.json();
+      // console.log("Image uploaded to cloudinary:", data.secure_url);
+      const settingsData = data.secure_url
+      const courseData = {curriculumData, landingPageData, settingsData}
+
+      //uploading to firestore "users" DB
+      const docRef = doc(firebaseFirestoreDb, "users", email);
+      const updateFirestoreDB = await updateDoc(docRef, { publishedCourses: arrayUnion(courseData)});
+
+      //uploading to firestore "globalCourses" DB
+      const globalCoursesDocRef = doc(firebaseFirestoreDb, "globalCourses", "courses");
+      const globalCourses = await updateDoc(globalCoursesDocRef, { globalCourses: arrayUnion(courseData)});
+
+      dispatch(addGlobalCourse(courseData))
+      dispatch(setPublishedCourses({...currentUser, ...courseData})); // sending to redux store
+      navigate('/published-courses')
+      // console.log("courseData:", courseData )
+    } catch (err) {
+      console.error("Upload error:", err);
+    } finally {
+      setPublishing(false);
+    }
+  };
 
   useEffect(() => {
-    const isFormComplete = 
-      curriculumData.length > 0 && // Ensure there's at least one lecture
-      Object.keys(landingPageData).length > 0 && // Ensure landing page data isn't empty
-      Object.keys(settingsData).length > 0; // Ensure settings data isn't empty
+    const hasThumbnail = thumbnailData instanceof FormData && thumbnailData.has("file");
+  
+    const isFormComplete = curriculumData.length > 0 && Object.keys(landingPageData).length > 0 && hasThumbnail;
   
     setIsDisabled(!isFormComplete);
-  }, [curriculumData, landingPageData, settingsData]);
+  }, [curriculumData, landingPageData, thumbnailData]);
+  
 
   //console.log(curriculumData, landingPageData, settingsData)
 
@@ -84,9 +120,17 @@ const CreateNewCourse = () => {
         </div>}
         {activeTab === 'Settings' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap items-center w-max h-full mt-2 p-2'>
           <CourseSettings
-           setSettingsData={setSettingsData} />
+           setSettingsData={setThumbnailData} />
         </div>}
       </div>
+      {/*Publishing  Modal */}
+      {publishing && (
+        <div className="fixed inset-0 flex items-center justify-center bg-green/50 backdrop-blur-sm p-4">
+          <div className="bg-gray-50 px-4 py-8 rounded-2xl shadow-2xl text-center sm:p-6 justify-center items-center flex flex-col">
+              <p className="text-lg font-semibold">Course is being published. Sit back and Relax!</p>
+              <p className="text-lg mt-4 text-black px-4 py-2 bg-green-500 rounded-2xl w-max">Publishing...</p>
+          </div>
+        </div>)}
     </div>
   )
 }
