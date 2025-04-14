@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setMyCourses } from '../auth/userFormDataSlice';
-import allCourses from '../../store/global-courses-list';
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import { doc, getDoc, arrayUnion, updateDoc } from "firebase/firestore";
 import { firebaseFirestoreDb } from '../../../firebase';
 
@@ -11,8 +11,7 @@ const CourseDetails = () => {
   const { id } = useParams(); // Extract 'id' from URL
   const [showBuyCourseModal, setShowBuyCourseModal] = useState(false);
   const [processing, setProcessing] = useState(false);
-  // const PublishedCoursesFromStore = useSelector(state => state.userFormData.publishedCourses);
-  const globalCourses = allCourses;
+  const globalCourses = useSelector(state => state.globalCourses.courses)
   const MyCoursesFromCurrentUser = useSelector(state=> state.userFormData.currentUser.myCourses);
   const currentUser = useSelector(state => state.userFormData.currentUser)
   const email = useSelector(state => state.userFormData.currentUser.email)
@@ -74,50 +73,55 @@ const CourseDetails = () => {
   };
   
   return (
-    <div className="flex flex-col h-[96%] p-4 sm:p-8 gap-4">
-      {/* Course Header */}
-      <div className="bg-gray-200 h-auto rounded flex flex-col items-start justify-center p-4 gap-2">
-        <span className='font-bold'>{course.landingPageData.title}</span>
-        <span className='text-sm ml-4'>Created By: </span>
-        <span className='text-sm ml-4'>Language: {course.landingPageData.primaryLanguage}</span>
-      </div>
-      {/* Course Details */}
-      <div className="h-auto w-full flex flex-col justify-start items-start rounded overflow-hidden gap-4 sm:flex-row">
-        {/* Course Content */}
-        <div className="flex flex-col w-full sm:w-[60%] justify-center items-start gap-2">
+    <div className="flex justify-center items-center flex-col h-full p-4 sm:flex-row sm:p-8 gap-4">
+      <div className=' flex flex-col gap-2 sm:gap-4'>
+        {/* Course Header */}
+        <div className='bg-gray-100 h-auto rounded flex flex-col items-start justify-center p-2 gap-2'>
+          <span className='font-bold text-lg place-self-center ml-2'>{course.landingPageData.title}</span>
+          <div 
+            className="bg-gray-100 h-auto rounded flex flex-wrap items-start justify-center p-2 gap-2">
+            <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Created By: <span className='font-medium'>ABC</span></span>
+
+            <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Language: <span className='font-medium'>{course.landingPageData.primaryLanguage}</span></span>
+
+            <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Level: <span className='font-medium'>{course.landingPageData.level}</span></span>
+
+            <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Published: <span className='font-medium'>5 April 2025</span></span>
+          </div>
+        </div>
+        {/* Course description and Curriculum */}
+        <div className="flex flex-col w-full justify-center items-start gap-2 sm:gap-4">
           <div className="bg-gray-100 h-auto w-full rounded p-4 gap-2 flex flex-col items-start justify-center">
           <span className='font-medium'>Description:</span>
           <span className='text-sm ml-4'>{course.landingPageData.description}</span>
           </div>
           <div className="bg-gray-100 h-auto w-full rounded p-4 gap-2 flex flex-col items-start justify-center">
           <span className='font-medium'>Curriculum:</span>
-          {course.curriculumData?.map(item=>
+          {course.curriculumData?.map((item, index)=>
             <>
-            <span key={item.name} className='text-sm ml-4'>{item.name}</span>
+            <span key={item.name} className='text-sm ml-4 bg-gray-200 pr-4 pl-2 py-1 rounded shadow-md font-medium border-blue-500 border'><PlayCircleFilledIcon fontSize='medium'/> {item.name}</span>
             </>
           )}
           </div>
         </div>
-
-        {/* Course Sidebar */}
-        <div className="flex flex-1 flex-col items-center justify-center gap-3 p-2 shadow-md rounded bg-gray-100">
-          <img 
-            src={course.settingsData.imageURL} 
-            alt={course.landingPageData.title} 
-            className="min-h-24 min-w-36 max-h-56 object-center rounded"
-          />
-          { !isCourseExists ? <span className='font-medium'>Price: ${course.landingPageData.price}</span> : ''}
-          
-          { isCourseExists ? 
-            <button 
-              className="bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
-            >Start Watching</button>  : 
-            <button 
-              onClick={handleBuyNowBtn}
-              className="bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
-            >Buy Now</button>
-          }
-        </div>
+      </div>
+      {/* Course Image Card */}
+      <div className="flex flex-col items-center justify-center gap-2 p-2 shadow-md rounded bg-gray-100">
+        <img 
+          src={course.settingsData} 
+          alt={course.landingPageData.title} 
+          className="min-h-24 min-w-36 max-h-56 object-center rounded"
+        />
+        { !isCourseExists ? <span className='font-medium'>Price: ${course.landingPageData.price}</span> : ''}
+        { isCourseExists ? 
+          <button 
+            className="bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
+          >Start Watching</button>  : 
+          <button 
+            onClick={handleBuyNowBtn}
+            className="bg-blue-700 hover:bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
+          >Buy Now</button>
+        }
       </div>
       {/* Modal */}
       {showBuyCourseModal && (

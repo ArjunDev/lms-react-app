@@ -112,7 +112,6 @@ const MenuBar = () => {
           className={({ isActive }) => isActive ? "text-blue-600 font-medium bg-gray-50 p-1 px-3 rounded-2xl transition-all duration-300" : "text-gray-300 font-medium p-1 px-3 transition-all duration-300"}
         >My Courses</NavLink>
         }
-
         {/* render only if logged in user in creatorMode */}
         {creatorMode && <NavLink 
           to={'/published-courses'}

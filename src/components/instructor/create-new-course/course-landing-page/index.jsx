@@ -9,7 +9,7 @@ const CourseLandingPage = ({setLandingPageData}) => {
     description: '',
     price: '',
     primaryLanguage: 'English',
-    level: '1'
+    level: 'Beginner'
   });
 
   const handleInputChange = (e) => {
@@ -89,9 +89,9 @@ const CourseLandingPage = ({setLandingPageData}) => {
             value={formData.level}
             onChange={handleInputChange}
           >
-            <option value="1" defaultValue>Beginner</option>
-            <option value="2">Intermediate</option> 
-            <option value="3">Advanced</option>
+            <option value="Beginner" defaultValue>Beginner</option>
+            <option value="Intermediate">Intermediate</option> 
+            <option value="Advanced">Advanced</option>
           </select>
         </label>
         <div className='flex justify-center items-center w-full'>

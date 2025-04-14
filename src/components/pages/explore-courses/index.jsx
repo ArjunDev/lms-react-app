@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
-import allCourses from '../../store/global-courses-list';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import {doc, getDoc } from "firebase/firestore";
 import { firebaseFirestoreDb } from '../../../firebase';
-// import { setGlobalCourses } from '../auth/userFormDataSlice';
 import { setGlobalCourses } from '../../store/globalCoursesSlice';
 
 const ExploreCourses = () => {
@@ -17,7 +15,7 @@ const ExploreCourses = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // to fetch from firebase only when page loaded for the first time
+    //to fetch from firebase only when component mounted for the first time
     if (globalCoursesFromRedux.length === 0) {
 
       const fetchGlobalCourses = async () => {
@@ -52,9 +50,10 @@ const ExploreCourses = () => {
     return (
       <div 
        className='text-gray-50 text-lg font-bold text-center mt-20'
-      >Fetching courses! Please wait</div>
+      >Fetching courses! Please wait...</div>
     )
   }
+  
   return (
     <div className='flex flex-col justify-start items-center h-full bg-gray-900 gap-4'>
       <div className='flex sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-4 mt-8'>

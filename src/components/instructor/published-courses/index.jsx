@@ -1,5 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const PublishedCourses = () => {
   const currentUserPublsihedCourses = useSelector(state => state.userFormData.currentUser.publishedCourses);
@@ -12,16 +14,18 @@ const PublishedCourses = () => {
     {(isCreator && isLoggedIn && currentUserPublsihedCourses.length > 0) ?currentUserPublsihedCourses.map((item, index) => 
       <div 
         key={index}
-        className='flex flex-col justify-center items-center bg-gray-50 p-2 rounded-2xl gap-1.5'>
+        className='flex flex-col justify-center items-center bg-gray-50 p-3 rounded-2xl gap-1.5'
+      >
         <img 
           src={item.settingsData}
-          className='bg-gray-200 rounded-2xl h-36 w-72 sm:h-50 sm:w-96 flex justify-center items-center object-center'
+          className='w-68 h-32 rounded-2xl object-cover border-1 shadow'
         />
         <span className='font-medium'>{item.landingPageData.title}</span>
         {/* <span>Author: </span> */}
         <div className='flex gap-4 mt-1'>
-          <button className='px-3 py-1 bg-blue-600 rounded-2xl text-white w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer'>Update</button>
-          <button className='px-3 py-1 bg-red-600 rounded-2xl text-white w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer'>Delete</button>
+          <button className='px-8 py-1 text-blue-600 bg-gray-300 rounded-2xl w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer'><EditIcon fontSize='medium'/></button>
+
+          <button className='px-8 text-red-600 bg-gray-300 rounded-2xl w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer'><DeleteIcon fontSize='medium'/></button>
         </div>
       </div> 
     ) : <div 
