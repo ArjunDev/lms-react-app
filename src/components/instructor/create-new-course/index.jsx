@@ -5,7 +5,7 @@ import CourseLandingPage from './course-landing-page';
 import CourseSettings from './settings';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPublishedCourses } from '../../pages/auth/userFormDataSlice';
-import { setGlobalCourses, addGlobalCourse } from '../../store/globalCoursesSlice';
+import { addGlobalCourse } from '../../store/globalCoursesSlice';
 import {doc, updateDoc, arrayUnion} from "firebase/firestore";
 import { firebaseFirestoreDb } from '../../../firebase';
 
@@ -23,6 +23,15 @@ const CreateNewCourse = () => {
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
 
+  // console.log(curriculumData);
+  // note: below is the curriculumData type before sending it to the firstore/ redux store 
+  {/* [{
+        id: 1744744580097
+        name: "testing-demo video"
+        videoFile: File
+        videoPreview: "blob:http://localhost:5173/b5ff88ac-f84d-4012-8ca3-3a514ad0731b"
+      }]
+  */}
   function handleCancelBtn() {
     navigate('/home');
   }
@@ -31,41 +40,105 @@ const CreateNewCourse = () => {
     setActiveTab(tabName);
   };
 
+  // const handlePublishBtn = async () => {
+
+  //   setPublishing(true);
+  //   thumbnailData.append("upload_preset", "unsigned_upload"); //your unsigned preset
+  //   try {
+  //     const res = await fetch("https://api.cloudinary.com/v1_1/dtpaoymjq/upload",
+  //       {
+  //         method: "POST",
+  //         body: thumbnailData,
+  //       }
+  //     );
+  //     const data = await res.json();
+  //     // console.log("Image uploaded to cloudinary:", data.secure_url);
+  //     const settingsData = data.secure_url
+  //     const courseData = {curriculumData, landingPageData, settingsData}
+
+  //     //uploading to firestore "users" DB
+  //     const docRef = doc(firebaseFirestoreDb, "users", email);
+  //     const updateFirestoreDB = await updateDoc(docRef, { publishedCourses: arrayUnion(courseData)});
+
+  //     //uploading to firestore "globalCourses" DB
+  //     const globalCoursesDocRef = doc(firebaseFirestoreDb, "globalCourses", "courses");
+  //     const globalCourses = await updateDoc(globalCoursesDocRef, { globalCourses: arrayUnion(courseData)});
+
+  //     dispatch(addGlobalCourse(courseData))
+  //     dispatch(setPublishedCourses({...currentUser, ...courseData})); // sending to redux store
+  //     navigate('/published-courses')
+  //     // console.log("courseData:", courseData )
+  //   } catch (err) {
+  //     console.error("Upload error:", err);
+  //   } finally {
+  //     setPublishing(false);
+  //   }
+  // };
+
   const handlePublishBtn = async () => {
-
     setPublishing(true);
-    thumbnailData.append("upload_preset", "unsigned_upload"); //your unsigned preset
+    thumbnailData.append("upload_preset", "unsigned_upload");
+  
     try {
-      const res = await fetch("https://api.cloudinary.com/v1_1/dtpaoymjq/upload",
-        {
+      // Upload Thumbnail
+      const thumbRes = await fetch("https://api.cloudinary.com/v1_1/dtpaoymjq/upload", {
+        method: "POST",
+        body: thumbnailData,
+      });
+
+      const thumbData = await thumbRes.json();
+      const settingsData = thumbData.secure_url;
+  
+      // Upload Curriculum Videos
+      const uploadedCurriculum = [];
+      //to upload a multiple videos if there
+      for (const lecture of curriculumData) {
+        const formData = new FormData();
+        formData.append("file", lecture.videoFile);
+        formData.append("upload_preset", "unsigned_upload");
+  
+        const videoRes = await fetch("https://api.cloudinary.com/v1_1/dtpaoymjq/video/upload", {
           method: "POST",
-          body: thumbnailData,
-        }
-      );
-      const data = await res.json();
-      // console.log("Image uploaded to cloudinary:", data.secure_url);
-      const settingsData = data.secure_url
-      const courseData = {curriculumData, landingPageData, settingsData}
-
-      //uploading to firestore "users" DB
+          body: formData,
+        });
+  
+        const videoData = await videoRes.json();
+  
+        uploadedCurriculum.push({
+          id: lecture.id,
+          name: lecture.name,
+          videoURL: videoData.secure_url,
+        });
+      }
+  
+      const courseData = {
+        curriculumData: uploadedCurriculum,
+        landingPageData,
+        settingsData,
+      };
+  
+      // Save to Firestore: "users" DB
       const docRef = doc(firebaseFirestoreDb, "users", email);
-      const updateFirestoreDB = await updateDoc(docRef, { publishedCourses: arrayUnion(courseData)});
-
-      //uploading to firestore "globalCourses" DB
+      await updateDoc(docRef, {
+        publishedCourses: arrayUnion(courseData),
+      });
+  
+      // Save to Firestore: "globalCourses" DB
       const globalCoursesDocRef = doc(firebaseFirestoreDb, "globalCourses", "courses");
-      const globalCourses = await updateDoc(globalCoursesDocRef, { globalCourses: arrayUnion(courseData)});
-
-      dispatch(addGlobalCourse(courseData))
-      dispatch(setPublishedCourses({...currentUser, ...courseData})); // sending to redux store
-      navigate('/published-courses')
-      // console.log("courseData:", courseData )
+      await updateDoc(globalCoursesDocRef, {
+        globalCourses: arrayUnion(courseData),
+      });
+      // finally sending to redux store
+      dispatch(addGlobalCourse(courseData));
+      dispatch(setPublishedCourses({ ...currentUser, ...courseData }));
+      navigate("/published-courses");
     } catch (err) {
       console.error("Upload error:", err);
     } finally {
       setPublishing(false);
     }
   };
-
+  
   useEffect(() => {
     const hasThumbnail = thumbnailData instanceof FormData && thumbnailData.has("file");
   
@@ -74,7 +147,6 @@ const CreateNewCourse = () => {
     setIsDisabled(!isFormComplete);
   }, [curriculumData, landingPageData, thumbnailData]);
   
-
   //console.log(curriculumData, landingPageData, settingsData)
 
   return (

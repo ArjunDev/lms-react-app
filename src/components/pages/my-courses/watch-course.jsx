@@ -1,35 +1,20 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { setMyCourses } from '../auth/userFormDataSlice';
+import { useNavigate, useParams } from 'react-router-dom';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
-import { doc, getDoc, arrayUnion, updateDoc } from "firebase/firestore";
-import { firebaseFirestoreDb } from '../../../firebase';
 
 const WatchCourses = () => {
 
   const { id } = useParams(); // Extract 'id' from URL
-  const [showBuyCourseModal, setShowBuyCourseModal] = useState(false);
-  const [processing, setProcessing] = useState(false);
   const globalCourses = useSelector(state => state.globalCourses.courses)
   const MyCoursesFromCurrentUser = useSelector(state=> state.userFormData.currentUser.myCourses);
   const currentUser = useSelector(state => state.userFormData.currentUser)
-  const email = useSelector(state => state.userFormData.currentUser.email)
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //show worning if user is not loggedIn and course not exist in user mycourse
-  if(!currentUser.isLoggedIn && !isCourseExists){
-    return (
-      <div 
-       className='text-red-500 text-lg font-bold text-center mt-60'
-      >UnAuthorized access!</div>
-    )
-  }
-
   // Find the selected course based on 'id'
   const course = globalCourses?.find(item => item.landingPageData.courseId === id);
-
   // console.log(currentUser.myCourses);
   //check whether course is already exist in user My Courses
   const isCourseExists = MyCoursesFromCurrentUser.some(course => course.courseId === id)
@@ -38,51 +23,18 @@ const WatchCourses = () => {
     return <div className="text-center text-red-500 font-bold mt-28">Course Not Found!</div>;
   }
 
-  // const handleBuyNowBtn = () =>{
-  //   setShowBuyCourseModal(true);
-  //   //console.log(course);
-  // }
+  //show warning if user is not loggedIn and course not exist in user mycourse
+  if(!currentUser.isLoggedIn && !isCourseExists){
+    return (
+      <div 
+       className='text-red-500 text-lg font-bold text-center mt-60'
+      >UnAuthorized access!</div>
+    )
+  }
 
-  // const handleCancel = () => {
-  //   setShowBuyCourseModal(false);
-  // };
-
-  // const handleProceed = async() => {
-
-  //   setProcessing(true);
-  //   const title = course.landingPageData.title;
-  //   const courseId = course.landingPageData.courseId
-  //   const description = course.landingPageData.description;
-  //   const settingsData = course.settingsData;
-
-  //   if(!currentUser.isLoggedIn){
-  //     navigate('/auth/signin');
-  //   }else{
-  //   const db = firebaseFirestoreDb;
-  //   try{
-  //     const docRef = doc(db, "users", email);
-  //     const updateUserDbData = await updateDoc(docRef, {
-  //       myCourses: arrayUnion({title, courseId, description, settingsData})});
-
-  //     const docSnap = await getDoc(docRef);   // Fetch the document
-  //     if (docSnap.exists()) {
-  //       let userDbData = docSnap.data();   // Extract data
-  //       // dispatch(setMyCourses({title, courseId, description, imageURl}));
-  //       dispatch(setMyCourses(userDbData.myCourses));
-  //       console.log("userDbData:", userDbData.myCourses );
-  //       navigate('/my-courses')
-  //     } 
-  //     setProcessing(false);
-  //     setShowBuyCourseModal(false);
-  //   }catch(error){
-  //     // setErrorMsg(true)
-  //     setProcessing(false);
-  //     console.log(error.code, error.message);
-  //   }}
-  // };
-  
   return (
     <div className="flex justify-center items-center flex-col h-full p-4 sm:flex-row sm:p-8 gap-4">
+      {/* course details */}
       <div className=' flex flex-col gap-2 sm:gap-4'>
         {/* Course Header */}
         <div className='bg-gray-100 h-auto rounded flex flex-col items-start justify-center p-2 gap-2'>
@@ -114,39 +66,14 @@ const WatchCourses = () => {
           </div>
         </div>
       </div>
-      {/* Course Image Card */}
-      <div className="flex flex-col items-center justify-center gap-2 p-2 shadow-md rounded bg-gray-100">
-        <img 
-          src={course.settingsData} 
-          alt={course.landingPageData.title} 
-          className="min-h-24 min-w-36 max-h-56 object-center rounded"
+      {/* Course video Card */}
+      <div className="flex flex-col items-center justify-center gap-2 overflow-hidden shadow-md rounded bg-blue-500">
+        <video
+          src={"#"}
+          controls
+          className="w-full h-full object-cover p-0.5"
         />
-        {currentUser.isLoggedIn && (isCourseExists && 
-          <button 
-            className='px-4 py-1.5 bg-gray-900 rounded-2xl text-white w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer text-center'
-          >Play</button>)       
-        }
       </div>
-      {/* Modal */}
-      {showBuyCourseModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm p-4">
-        {processing ? <div className="bg-white p-6 rounded-2xl shadow-lg text-center sm:p-6">
-          <p className="text-lg text-green-500 font-semibold p-2">Processing...</p>
-        </div> : 
-          <div className="bg-white p-6 rounded-2xl shadow-lg text-center sm:p-6">
-            <p className="text-lg font-semibold">Make a dummy payment!</p>
-            <div className="mt-4 flex justify-center gap-4">
-              <button 
-                onClick={handleProceed} 
-                className="px-4 py-2 bg-green-500 text-white rounded cursor-pointer shadow-md">Proceed</button>
-              <button 
-                onClick={handleCancel} 
-                className="px-4 py-2 bg-red-500 text-white rounded cursor-pointer shadow-md">Cancel</button>
-            </div>
-          </div>
-          }
-        </div>
-      )}
     </div>
   );
 };
