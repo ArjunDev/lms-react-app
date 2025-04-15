@@ -11,7 +11,7 @@ import SignUp from "./components/pages/auth/signup";
 import ProtectedRoute from "./components/protected-routes"
 import { useSelector } from "react-redux"
 import CourseDetails from "./components/pages/course-details"
-
+import WatchCourses from "./components/pages/my-courses/watch-course"
 function App() {
   
   const location = useLocation();
@@ -35,8 +35,11 @@ function App() {
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
         <Route path="/my-courses" element={<MyCourses/>}/>
+        {/* to show course detials from mycourse page */}
+        <Route path="/my-courses/watch/:id" element={<WatchCourses />} />
         <Route path="/explore-courses" element={<ExploreCourses/>}/>
         <Route path="/explore-courses/course/:id" element={<CourseDetails />} />
+ 
 
         {/* Protected Routes */}
         <Route 

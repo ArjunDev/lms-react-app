@@ -66,7 +66,7 @@ const Home = () => {
   if(loading){
     return (
       <div 
-       className='text-gray-50 text-lg font-bold text-center mt-20'
+       className='text-green-500 text-lg font-bold text-center mt-60'
       >Fetching courses! Please wait...</div>
     )
   }

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { setMyCourses } from '../auth/userFormDataSlice';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import { doc, getDoc, arrayUnion, updateDoc } from "firebase/firestore";
 import { firebaseFirestoreDb } from '../../../firebase';
 
-const CourseDetails = () => {
+const WatchCourses = () => {
 
   const { id } = useParams(); // Extract 'id' from URL
   const [showBuyCourseModal, setShowBuyCourseModal] = useState(false);
@@ -17,6 +17,15 @@ const CourseDetails = () => {
   const email = useSelector(state => state.userFormData.currentUser.email)
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  //show worning if user is not loggedIn and course not exist in user mycourse
+  if(!currentUser.isLoggedIn && !isCourseExists){
+    return (
+      <div 
+       className='text-red-500 text-lg font-bold text-center mt-60'
+      >UnAuthorized access!</div>
+    )
+  }
 
   // Find the selected course based on 'id'
   const course = globalCourses?.find(item => item.landingPageData.courseId === id);
@@ -29,48 +38,48 @@ const CourseDetails = () => {
     return <div className="text-center text-red-500 font-bold mt-28">Course Not Found!</div>;
   }
 
-  const handleBuyNowBtn = () =>{
-    setShowBuyCourseModal(true);
-    //console.log(course);
-  }
+  // const handleBuyNowBtn = () =>{
+  //   setShowBuyCourseModal(true);
+  //   //console.log(course);
+  // }
 
-  const handleCancel = () => {
-    setShowBuyCourseModal(false);
-  };
+  // const handleCancel = () => {
+  //   setShowBuyCourseModal(false);
+  // };
 
-  const handleProceed = async() => {
+  // const handleProceed = async() => {
 
-    setProcessing(true);
-    const title = course.landingPageData.title;
-    const courseId = course.landingPageData.courseId
-    const description = course.landingPageData.description;
-    const settingsData = course.settingsData;
+  //   setProcessing(true);
+  //   const title = course.landingPageData.title;
+  //   const courseId = course.landingPageData.courseId
+  //   const description = course.landingPageData.description;
+  //   const settingsData = course.settingsData;
 
-    if(!currentUser.isLoggedIn){
-      navigate('/auth/signin');
-    }else{
-    const db = firebaseFirestoreDb;
-    try{
-      const docRef = doc(db, "users", email);
-      const updateUserDbData = await updateDoc(docRef, {
-        myCourses: arrayUnion({title, courseId, description, settingsData})});
+  //   if(!currentUser.isLoggedIn){
+  //     navigate('/auth/signin');
+  //   }else{
+  //   const db = firebaseFirestoreDb;
+  //   try{
+  //     const docRef = doc(db, "users", email);
+  //     const updateUserDbData = await updateDoc(docRef, {
+  //       myCourses: arrayUnion({title, courseId, description, settingsData})});
 
-      const docSnap = await getDoc(docRef);   // Fetch the document
-      if (docSnap.exists()) {
-        let userDbData = docSnap.data();   // Extract data
-        // dispatch(setMyCourses({title, courseId, description, imageURl}));
-        dispatch(setMyCourses(userDbData.myCourses));
-        // console.log("userDbData:", userDbData.myCourses );
-        navigate('/my-courses')
-      } 
-      setProcessing(false);
-      setShowBuyCourseModal(false);
-    }catch(error){
-      // setErrorMsg(true)
-      setProcessing(false);
-      console.log(error.code, error.message);
-    }}
-  };
+  //     const docSnap = await getDoc(docRef);   // Fetch the document
+  //     if (docSnap.exists()) {
+  //       let userDbData = docSnap.data();   // Extract data
+  //       // dispatch(setMyCourses({title, courseId, description, imageURl}));
+  //       dispatch(setMyCourses(userDbData.myCourses));
+  //       console.log("userDbData:", userDbData.myCourses );
+  //       navigate('/my-courses')
+  //     } 
+  //     setProcessing(false);
+  //     setShowBuyCourseModal(false);
+  //   }catch(error){
+  //     // setErrorMsg(true)
+  //     setProcessing(false);
+  //     console.log(error.code, error.message);
+  //   }}
+  // };
   
   return (
     <div className="flex justify-center items-center flex-col h-full p-4 sm:flex-row sm:p-8 gap-4">
@@ -99,7 +108,7 @@ const CourseDetails = () => {
           <span className='font-medium'>Curriculum:</span>
           {course.curriculumData?.map((item, index)=>
             <>
-            <span key={item.name} className='text-sm ml-4 bg-gray-200 pr-4 pl-2 py-1 rounded shadow-md font-medium border-blue-500 border'><PlayCircleFilledIcon fontSize='medium'/> {item.name}</span>
+            <span key={item.name} className='text-sm ml-4 bg-gray-200 pr-4 pl-2 py-1 rounded shadow-md font-medium border-blue-500 border'><PlayCircleFilledIcon fontSize='medium' className='cursor-pointer'/> {item.name}</span>
             </>
           )}
           </div>
@@ -112,15 +121,10 @@ const CourseDetails = () => {
           alt={course.landingPageData.title} 
           className="min-h-24 min-w-36 max-h-56 object-center rounded"
         />
-        { !isCourseExists ? <span className='font-medium'>Price: ${course.landingPageData.price}</span> : ''}
-        { isCourseExists ? 
+        {currentUser.isLoggedIn && (isCourseExists && 
           <button 
-            className="bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
-          >Start Watching</button>  : 
-          <button 
-            onClick={handleBuyNowBtn}
-            className="bg-blue-700 hover:bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
-          >Buy Now</button>
+            className='px-4 py-1.5 bg-gray-900 rounded-2xl text-white w-[90%] sm:w-full hover:bg-gray-800 cursor-pointer text-center'
+          >Play</button>)       
         }
       </div>
       {/* Modal */}
@@ -147,4 +151,4 @@ const CourseDetails = () => {
   );
 };
 
-export default CourseDetails;
+export default WatchCourses;
