@@ -30,6 +30,18 @@ const Curriculum = ({ setCurriculumData }) => {
 
   // Handle video change per lecture
   const handleVideoChange = (id, file) => {
+
+    // to restirct videofile size MB
+    if (file) {
+      const sizeInBytes = file.size;
+      const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
+      // console.log(`Video size: ${sizeInMB} MB`);
+      if (sizeInMB > 15) {
+        alert(`This application is for Demo purpose. Video size is: ${sizeInMB} MB. Max allowed size is 15 MB.`);
+        return
+      }
+    }
+
     if (file && file.type.startsWith("video/")) {
       const videoPreview = URL.createObjectURL(file);
       setLectures((prev) =>
@@ -50,7 +62,7 @@ const Curriculum = ({ setCurriculumData }) => {
 
   const handleSaveFormaData = () => {
     setCurriculumData(lectures);
-    console.log("lectures:", lectures)
+    // console.log("lectures:", lectures)
   };
 
   return (

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const CourseLandingPage = ({setLandingPageData}) => {
 
+  const author = useSelector(state=> state.userFormData.currentUser.name);
   const [isDisabled, setIsDisabled ] = useState(true);
   const [formData, setFormData] = useState({
     courseId: Date.now() + Math.random().toString(36).substring(2,9),//to create uniq id
@@ -9,7 +11,7 @@ const CourseLandingPage = ({setLandingPageData}) => {
     description: '',
     price: '',
     primaryLanguage: 'English',
-    level: 'Beginner'
+    level: 'Beginner',
   });
 
   const handleInputChange = (e) => {
@@ -19,10 +21,23 @@ const CourseLandingPage = ({setLandingPageData}) => {
     });
   };
 
+  // console.log("author:", author)
+
   const handleLandingPageFormData = (e) => {
     e.preventDefault();
     //console.log('Form Data Submitted:', formData);
-    setLandingPageData(formData);
+
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+
+    const updatedFormData = {...formData, authorName: author, publishedDate: formattedDate}
+
+
+    setLandingPageData(updatedFormData);
   };
 
     // Update isDisabled based on form data

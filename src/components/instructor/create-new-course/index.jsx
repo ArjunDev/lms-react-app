@@ -40,42 +40,8 @@ const CreateNewCourse = () => {
     setActiveTab(tabName);
   };
 
-  // const handlePublishBtn = async () => {
-
-  //   setPublishing(true);
-  //   thumbnailData.append("upload_preset", "unsigned_upload"); //your unsigned preset
-  //   try {
-  //     const res = await fetch("https://api.cloudinary.com/v1_1/dtpaoymjq/upload",
-  //       {
-  //         method: "POST",
-  //         body: thumbnailData,
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     // console.log("Image uploaded to cloudinary:", data.secure_url);
-  //     const settingsData = data.secure_url
-  //     const courseData = {curriculumData, landingPageData, settingsData}
-
-  //     //uploading to firestore "users" DB
-  //     const docRef = doc(firebaseFirestoreDb, "users", email);
-  //     const updateFirestoreDB = await updateDoc(docRef, { publishedCourses: arrayUnion(courseData)});
-
-  //     //uploading to firestore "globalCourses" DB
-  //     const globalCoursesDocRef = doc(firebaseFirestoreDb, "globalCourses", "courses");
-  //     const globalCourses = await updateDoc(globalCoursesDocRef, { globalCourses: arrayUnion(courseData)});
-
-  //     dispatch(addGlobalCourse(courseData))
-  //     dispatch(setPublishedCourses({...currentUser, ...courseData})); // sending to redux store
-  //     navigate('/published-courses')
-  //     // console.log("courseData:", courseData )
-  //   } catch (err) {
-  //     console.error("Upload error:", err);
-  //   } finally {
-  //     setPublishing(false);
-  //   }
-  // };
-
   const handlePublishBtn = async () => {
+
     setPublishing(true);
     thumbnailData.append("upload_preset", "unsigned_upload");
   

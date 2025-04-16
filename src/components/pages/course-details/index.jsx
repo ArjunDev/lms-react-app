@@ -21,10 +21,12 @@ const CourseDetails = () => {
   // Find the selected course based on 'id'
   const course = globalCourses?.find(item => item.landingPageData.courseId === id);
 
-  console.log("Course:", course);
+  // console.log("Course:", course);
   
   //check whether course is already exist in user My Courses
-  const isCourseExists = MyCoursesFromCurrentUser.some(course => course.courseId === id)
+  const isCourseExists = MyCoursesFromCurrentUser.some(course => course.landingPageData.courseId === id)
+
+  // console.log(isCourseExists)
 
   if (!course) {
     return <div className="text-center text-red-500 font-bold mt-28">Course Not Found!</div>;
@@ -38,6 +40,10 @@ const CourseDetails = () => {
 
     setShowBuyCourseModal(true);
     //console.log(course);
+  }
+
+  const handleStartWatchingBtn = () =>{
+    navigate(`/my-courses/watch/${id}`)
   }
 
   const handleCancel = () => {
@@ -83,13 +89,13 @@ const CourseDetails = () => {
           <span className='font-bold text-lg place-self-center ml-2'>{course.landingPageData.title}</span>
           <div 
             className="bg-gray-100 h-auto rounded flex flex-wrap items-start justify-center p-2 gap-2">
-            <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Created By: <span className='font-medium'>ABC</span></span>
+            <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Created By: <span className='font-medium'>{course.landingPageData.authorName}</span></span>
 
             <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Language: <span className='font-medium'>{course.landingPageData.primaryLanguage}</span></span>
 
             <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Level: <span className='font-medium'>{course.landingPageData.level}</span></span>
 
-            <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Published: <span className='font-medium'>5 April 2025</span></span>
+            <span className='text-sm ml-4 bg-gray-200 px-2 py-1 rounded shadow-md'>Published: <span className='font-medium'>{course.landingPageData.publishedDate}</span></span>
           </div>
         </div>
         {/* Course description and Curriculum */}
@@ -119,7 +125,8 @@ const CourseDetails = () => {
         { isCourseExists ? 
           <button 
             className="bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
-          >Start Watching</button>  : 
+            onClick={handleStartWatchingBtn}
+          >Start Watching</button> : 
           <button 
             onClick={handleBuyNowBtn}
             className="bg-gray-900 hover:bg-blue-700 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"

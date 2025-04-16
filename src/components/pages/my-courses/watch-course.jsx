@@ -10,7 +10,7 @@ const WatchCourses = () => {
   // Find the selected course based on 'id'
   const course = MyCoursesFromCurrentUser?.find(item => item.landingPageData.courseId === id);
   const currentUser = useSelector(state => state.userFormData.currentUser);
-  const [ URLToPlay, setURLToPlay ] = useState("");
+  const [ URLToPlay, setURLToPlay ] = useState("#");
 
   // console.log(URLToPlay);
   // console.log(currentUser.myCourses);
@@ -69,7 +69,7 @@ const WatchCourses = () => {
         </div>
       </div>
       {/* Course video Card */}
-      <div className="flex flex-col items-center justify-center gap-2 overflow-hidden shadow-md rounded bg-blue-500">
+      <div className="flex flex-col items-center justify-center gap-2 overflow-hidden shadow-md rounded bg-blue-500 w-[90vw] sm:max-w-[35vw]">
         <video
           src={URLToPlay}
           controls
