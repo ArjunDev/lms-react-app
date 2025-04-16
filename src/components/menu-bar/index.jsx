@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ChangeProfilePicture from './ChangeProfilePicture';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogOut, setCreatorMode, setStudentMode, setIsCreator, setProfilePicture } from '../pages/auth/userFormDataSlice';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -20,13 +20,14 @@ const MenuBar = () => {
   const [isCreatorModeToggled, setIsCreatorModeToggled] = useState(false);
   const formDataFromStore = useSelector(state => state.userFormData.currentUser);
   const { isLoggedIn, isCreator, creatorMode, studentMode, email, profilePicture } = formDataFromStore;
+  const navigate = useNavigate();
 
   // console.log(profilePicture);
   const handleSignOut = () => {
+
     setIsCreatorModeToggled(false);//local state
     dispatch(setLogOut());
-    // dispatch(setCreatorMode(false));
-    // dispatch(setStudentMode(true));
+    navigate("/home");
   }
   // Reset profile dropdown upon navigating to auth pages
   useEffect(() => {

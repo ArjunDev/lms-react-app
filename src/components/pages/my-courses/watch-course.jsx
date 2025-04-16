@@ -1,35 +1,37 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 
 const WatchCourses = () => {
 
   const { id } = useParams(); // Extract 'id' from URL
-  const globalCourses = useSelector(state => state.globalCourses.courses)
   const MyCoursesFromCurrentUser = useSelector(state=> state.userFormData.currentUser.myCourses);
-  const currentUser = useSelector(state => state.userFormData.currentUser)
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   // Find the selected course based on 'id'
-  const course = globalCourses?.find(item => item.landingPageData.courseId === id);
+  const course = MyCoursesFromCurrentUser?.find(item => item.landingPageData.courseId === id);
+  const currentUser = useSelector(state => state.userFormData.currentUser);
+  const [ URLToPlay, setURLToPlay ] = useState("");
+
+  // console.log(URLToPlay);
   // console.log(currentUser.myCourses);
+
   //check whether course is already exist in user My Courses
-  const isCourseExists = MyCoursesFromCurrentUser.some(course => course.courseId === id)
+  // const isCourseExists = MyCoursesFromCurrentUser.some(item => item.landingPageData.courseId === id)
 
   if (!course) {
     return <div className="text-center text-red-500 font-bold mt-28">Course Not Found!</div>;
   }
-
   //show warning if user is not loggedIn and course not exist in user mycourse
-  if(!currentUser.isLoggedIn && !isCourseExists){
+  if(!currentUser.isLoggedIn){
     return (
       <div 
        className='text-red-500 text-lg font-bold text-center mt-60'
       >UnAuthorized access!</div>
     )
+  }
+
+  const handlePlayBtn = (currentURL) =>{
+    setURLToPlay(currentURL);
   }
 
   return (
@@ -60,7 +62,7 @@ const WatchCourses = () => {
           <span className='font-medium'>Curriculum:</span>
           {course.curriculumData?.map((item, index)=>
             <>
-            <span key={item.name} className='text-sm ml-4 bg-gray-200 pr-4 pl-2 py-1 rounded shadow-md font-medium border-blue-500 border'><PlayCircleFilledIcon fontSize='medium' className='cursor-pointer'/> {item.name}</span>
+            <span key={item.name} className='text-sm ml-4 bg-gray-200 pr-4 pl-2 py-1 rounded shadow-md font-medium border-blue-500 border'><PlayCircleFilledIcon fontSize='medium' className='cursor-pointer mr-2' onClick={()=>handlePlayBtn(item.videoURL)}/>{item.name}</span>
             </>
           )}
           </div>
@@ -69,7 +71,7 @@ const WatchCourses = () => {
       {/* Course video Card */}
       <div className="flex flex-col items-center justify-center gap-2 overflow-hidden shadow-md rounded bg-blue-500">
         <video
-          src={"#"}
+          src={URLToPlay}
           controls
           className="w-full h-full object-cover p-0.5"
         />

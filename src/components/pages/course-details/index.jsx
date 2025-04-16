@@ -21,7 +21,8 @@ const CourseDetails = () => {
   // Find the selected course based on 'id'
   const course = globalCourses?.find(item => item.landingPageData.courseId === id);
 
-  // console.log(currentUser.myCourses);
+  console.log("Course:", course);
+  
   //check whether course is already exist in user My Courses
   const isCourseExists = MyCoursesFromCurrentUser.some(course => course.courseId === id)
 
@@ -30,6 +31,11 @@ const CourseDetails = () => {
   }
 
   const handleBuyNowBtn = () =>{
+
+    if(!currentUser.isLoggedIn){
+      navigate('/auth/signin');
+    }
+
     setShowBuyCourseModal(true);
     //console.log(course);
   }
@@ -41,24 +47,21 @@ const CourseDetails = () => {
   const handleProceed = async() => {
 
     setProcessing(true);
-    const title = course.landingPageData.title;
-    const courseId = course.landingPageData.courseId
-    const description = course.landingPageData.description;
-    const settingsData = course.settingsData;
 
     if(!currentUser.isLoggedIn){
       navigate('/auth/signin');
     }else{
+
     const db = firebaseFirestoreDb;
     try{
       const docRef = doc(db, "users", email);
       const updateUserDbData = await updateDoc(docRef, {
-        myCourses: arrayUnion({title, courseId, description, settingsData})});
+        myCourses: arrayUnion(course)});
 
       const docSnap = await getDoc(docRef);   // Fetch the document
       if (docSnap.exists()) {
         let userDbData = docSnap.data();   // Extract data
-        // dispatch(setMyCourses({title, courseId, description, imageURl}));
+
         dispatch(setMyCourses(userDbData.myCourses));
         // console.log("userDbData:", userDbData.myCourses );
         navigate('/my-courses')
@@ -119,7 +122,7 @@ const CourseDetails = () => {
           >Start Watching</button>  : 
           <button 
             onClick={handleBuyNowBtn}
-            className="bg-blue-700 hover:bg-gray-900 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
+            className="bg-gray-900 hover:bg-blue-700 text-gray-100 font-medium p-1 rounded w-[80%] cursor-pointer"
           >Buy Now</button>
         }
       </div>
