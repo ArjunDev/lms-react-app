@@ -82,8 +82,8 @@ const CourseDetails = () => {
   };
   
   return (
-    <div className="flex justify-center items-center flex-col h-full p-4 sm:flex-row sm:p-8 gap-4">
-      <div className=' flex flex-col gap-2 sm:gap-4'>
+    <div className="flex justify-center items-center flex-col h-full p-4 sm:flex-row sm:p-8 gap-4 w-full">
+      <div className=' flex flex-col gap-2 sm:gap-4 sm:w-[60%]'>
         {/* Course Header */}
         <div className='bg-gray-100 h-auto rounded flex flex-col items-start justify-center p-2 gap-2'>
           <span className='font-bold text-lg place-self-center ml-2'>{course.landingPageData.title}</span>
