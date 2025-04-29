@@ -48,9 +48,10 @@ const ExploreCourses = () => {
   
   if(loading){
     return (
-      <div 
-       className='text-green-500 text-lg font-bold text-center mt-50'
-      >Fetching courses! Please wait...</div>
+      <div class="fixed inset-0 flex flex-col items-center justify-center z-50">
+        <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-gray-100 text-lg font-bold mt-4">Loading...</p>
+      </div>
     )
   }
   

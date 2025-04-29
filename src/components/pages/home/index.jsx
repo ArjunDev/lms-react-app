@@ -65,9 +65,10 @@ const Home = () => {
   
   if(loading){
     return (
-      <div 
-       className='text-green-500 text-lg font-bold text-center mt-60'
-      >Fetching courses! Please wait...</div>
+      <div class="fixed inset-0 flex flex-col items-center justify-center z-50">
+        <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-gray-100 text-lg font-bold mt-4">Loading...</p>
+      </div>
     )
   }
 
@@ -97,7 +98,7 @@ const Home = () => {
       </div>
       {/* course categories */}
       <div 
-        className='flex flex-col justify-center items-center gap-4 w-full bg-gray-100 flex-1 rounded-2xl p-4 sm:p-8'>
+        className='flex flex-col justify-center items-center gap-4 w-fit bg-gray-100 flex-1 rounded-2xl p-4 sm:p-8'>
         <div className='flex items-start justify-center'>
           <span className='flex font-bold text-left text-lg'>Course Categories</span>
         </div>
