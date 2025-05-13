@@ -92,7 +92,7 @@ const MenuBar = () => {
       <div className='flex justify-center items-center gap-3 sm:gap-6'>
         <NavLink 
           to={'home'}
-          className={({ isActive }) => isActive ? "text-blue-600 bg-gray-50 p-1 px-3 rounded-2xl font-medium duration-300" : "text-gray-300 font-medium transition-all duration-300"}
+          className={({ isActive }) => isActive ? "text-blue-600 bg-gray-50 p-1 px-2 rounded-2xl font-medium duration-300" : "text-gray-300 font-medium transition-all duration-300"}
         >LMS</NavLink>
 
         {/* render only if logged in user is a Student */}

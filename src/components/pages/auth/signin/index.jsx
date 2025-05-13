@@ -13,7 +13,7 @@ const SignIn = () => {
   });
   const [isDisabled, setIsDisabled] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading ] = useState(false);
+  const [submitting, setSubmitting ] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -35,7 +35,7 @@ const SignIn = () => {
     const db = firebaseFirestoreDb;
 
     const { email, password } = formData;
-    setLoading(true);
+    setSubmitting(true);
     try{
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const userDataFromDb = await getDoc(doc(db, "users", email));
@@ -45,7 +45,7 @@ const SignIn = () => {
 
           dispatch(setLogIn(userData));
           setFormData({ email: '', password: '' });
-          setLoading(false);
+          setSubmitting(false);
           navigate('/home');
         // console.log("User data:", userDataFromDb.data());
       } else {
@@ -54,7 +54,7 @@ const SignIn = () => {
       // console.log("userDataFromDb:", userDataFromDb)
     }catch(error){
       // console.log("auth failed:", error.message )
-      setLoading(false);
+      setSubmitting(false);
       console.log(error.code, error.message)
       if(error.message === "Firebase: Error (auth/invalid-credential)."){
         setErrorMessage("Invalid credential");
@@ -87,6 +87,7 @@ const SignIn = () => {
                 className='bg-gray-100 rounded p-1 ml-2'
                 type='email'
                 placeholder='Enter your email'
+                disabled ={submitting}
               />
             </label>
           </div>
@@ -101,6 +102,7 @@ const SignIn = () => {
                 className='bg-gray-100 rounded p-1 ml-2'
                 type='password'
                 placeholder='Enter your password'
+                disabled ={submitting}
               />
             </label>
           </div>
@@ -113,7 +115,7 @@ const SignIn = () => {
             }`}
             type='submit'
             disabled={isDisabled}
-          >{loading ? "Submitting..." : "Submit"}</button>
+          >{submitting ? "Submitting..." : "Submit"}</button>
 
           <span className='text-red-600 px-1 font-medium'>{errorMessage}</span>
 

@@ -15,7 +15,7 @@ const SignUp = () => {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [isDisabled, setIsDisabled ] = useState(true);
-  const [loading, setLoading ] = useState(false);
+  const [submitting, setSubmitting ] = useState(false);
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
   
@@ -60,7 +60,7 @@ const SignUp = () => {
       email: email 
     }
     const data = {...defaultUserData, isLoggedIn: true, ...userData}
-    setLoading(true);
+    setSubmitting(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password, );
       const userEmail = userCredential.user.email;
@@ -75,11 +75,11 @@ const SignUp = () => {
         email: '',
         password: ''
       });
-      setLoading(false);
+      setSubmitting(false);
       navigate('/home'); // Navigate to home page
     } catch (error) {
       // Show error message to user
-        setLoading(false);
+        setSubmitting(false);
         console.log(error);
         if(error.message === "Firebase: Error (auth/email-already-in-use)."){
           setErrorMessage("Email id already exist! Please Sign In")
@@ -112,6 +112,7 @@ const SignUp = () => {
             placeholder='Enter your name'
             value={formData.name}
             onChange={handleChange}
+            disabled={submitting}
             />
           </label>
         </div>
@@ -124,6 +125,7 @@ const SignUp = () => {
             placeholder='Enter an email'
             value={formData.email}
             onChange={handleChange}
+            disabled={submitting}
           />
         </label>
         </div>
@@ -137,6 +139,7 @@ const SignUp = () => {
             placeholder='Enter a password' 
             value={formData.password}
             onChange={handleChange}
+            disabled={submitting}
             />
           </label>
         </div>
@@ -148,7 +151,7 @@ const SignUp = () => {
           }`}
           type='submit'
           disabled={isDisabled}
-        >{loading ? "Submitting..." : "Submit"}</button>
+        >{submitting ? "Submitting..." : "Submit"}</button>
         <span 
           className='text-red-600 p-1 font-medium'
         >{errorMessage}</span>
