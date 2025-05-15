@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-const Curriculum = ({ setCurriculumData }) => {
+const Curriculum = ({ setCurriculumData, curriculumData }) => {
   const [lectures, setLectures] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
+
+  // console.log(curriculumData.length > 0)
+//to fill landing fields with saved data when move back and forth btw diff pages like settings, curriculum
+useEffect(()=>{
+  if(curriculumData.length > 0){
+    setLectures(curriculumData)
+  }
+},[])
 
   // Add a new lecture
   const handleAddLectureBtn = () => {

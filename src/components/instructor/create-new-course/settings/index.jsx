@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const CourseSettings = ({setSettingsData}) => {
+const CourseSettings = ({setSettingsData, settingsData}) => {
 
   const [image, setImage] = useState(null);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -15,6 +15,15 @@ const CourseSettings = ({setSettingsData}) => {
       setIsDisabled(false);
     }
   }, [image]);
+
+// //to fill settings  page fields with saved data when move back and forth btw diff pages like ladingpage, curriculum
+useEffect(()=>{
+  // console.log(settingsData instanceof File)
+  if (settingsData instanceof File) {
+    setImage(settingsData);
+  }
+  
+},[])
   
 
   const handleFileChange = (e) => {
@@ -26,11 +35,12 @@ const CourseSettings = ({setSettingsData}) => {
       alert("Please select an image.");
       return;
     }
-    // console.log("clicked save btn")
-    // setUploading(true);
-    const formData = new FormData();
-    formData.append("file", image);
-    setSettingsData(formData); // Pass URL to parent
+    // console.log(image)
+    // const formData = new FormData();
+    // formData.append("file", image);
+    // setSettingsData(formData); // Pass image to parent
+    
+    setSettingsData(image); // Pass image to parent
     setUploading(false)
   };
 

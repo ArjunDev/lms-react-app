@@ -20,7 +20,8 @@ const CreateNewCourse = () => {
   const email = useSelector(state=> state.userFormData.currentUser.email);
   const currentUser = useSelector(state=> state.userFormData.currentUser);
 
-  // console.log(landingPageData)
+  // console.log(thumbnailData);
+
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
 
@@ -44,13 +45,16 @@ const CreateNewCourse = () => {
   const handlePublishBtn = async () => {
 
     setPublishing(true);
-    thumbnailData.append("upload_preset", "unsigned_upload");
+
+    const thumbnailFormData = new FormData();
+    thumbnailFormData.append("file", thumbnailData);
+    thumbnailFormData.append("upload_preset", "unsigned_upload");
   
     try {
       // Upload Thumbnail
       const thumbRes = await fetch("https://api.cloudinary.com/v1_1/dtpaoymjq/upload", {
         method: "POST",
-        body: thumbnailData,
+        body: thumbnailFormData,
       });
 
       const thumbData = await thumbRes.json();
@@ -107,8 +111,8 @@ const CreateNewCourse = () => {
   };
   
   useEffect(() => {
-    const hasThumbnail = thumbnailData instanceof FormData && thumbnailData.has("file");
-  
+    const hasThumbnail = thumbnailData instanceof File;
+    
     const isFormComplete = curriculumData.length > 0 && Object.keys(landingPageData).length > 0 && hasThumbnail;
   
     setIsDisabled(!isFormComplete);
@@ -151,7 +155,8 @@ const CreateNewCourse = () => {
         </div>
         {activeTab === 'Curriculum' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap container items-start w-max h-full mt-2 p-2'>
         <Curriculum 
-          setCurriculumData={setCurriculumData} />
+          setCurriculumData={setCurriculumData}
+          curriculumData={curriculumData} />
         </div>}
         {activeTab === 'Landing Page' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap items-center w-full h-full mt-2 p-2'>
           <CourseLandingPage 
@@ -160,7 +165,8 @@ const CreateNewCourse = () => {
         </div>}
         {activeTab === 'Settings' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap items-center w-max h-full mt-2 p-2'>
           <CourseSettings
-           setSettingsData={setThumbnailData} />
+           setSettingsData={setThumbnailData} 
+           settingsData={thumbnailData}/>
         </div>}
       </div>
       {/*Publishing  Modal */}
