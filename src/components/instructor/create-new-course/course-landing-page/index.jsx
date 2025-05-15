@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-const CourseLandingPage = ({setLandingPageData}) => {
+const CourseLandingPage = ({setLandingPageData, landingPageData}) => {
 
   const author = useSelector(state=> state.userFormData.currentUser.name);
   const [isDisabled, setIsDisabled ] = useState(true);
@@ -13,6 +13,14 @@ const CourseLandingPage = ({setLandingPageData}) => {
     primaryLanguage: 'English',
     level: 'Beginner',
   });
+
+  // console.log(Object.keys(landingPageData).length > 0)
+//to fill landing fields with saved data when move back and forth btw diff pages like settings, curriculum
+  useEffect(()=>{
+    if(Object.keys(landingPageData).length > 0){
+      setFormData(landingPageData)
+    }
+  },[])
 
   const handleInputChange = (e) => {
     setFormData({

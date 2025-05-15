@@ -20,6 +20,7 @@ const CreateNewCourse = () => {
   const email = useSelector(state=> state.userFormData.currentUser.email);
   const currentUser = useSelector(state=> state.userFormData.currentUser);
 
+  // console.log(landingPageData)
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
 
@@ -150,11 +151,12 @@ const CreateNewCourse = () => {
         </div>
         {activeTab === 'Curriculum' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap container items-start w-max h-full mt-2 p-2'>
         <Curriculum 
-          setCurriculumData={setCurriculumData}/>
+          setCurriculumData={setCurriculumData} />
         </div>}
         {activeTab === 'Landing Page' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap items-center w-full h-full mt-2 p-2'>
           <CourseLandingPage 
-           setLandingPageData={setLandingPageData} />
+           setLandingPageData={setLandingPageData} 
+           landingPageData={landingPageData}/>
         </div>}
         {activeTab === 'Settings' && <div className='flex flex-col justify-center sm:flex-row sm:flex-wrap items-center w-max h-full mt-2 p-2'>
           <CourseSettings
